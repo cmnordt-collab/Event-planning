@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Planning Dashboard - Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        input, textarea { background: #1e293b; border-color: #334155; color: #e2e8f0; }
+        input:focus, textarea:focus { outline: none; border-color: #06b6d4; background: #0f172a; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100">
+
+<div id="app"></div>
+
+<script>
+// ============ DEMO MODE - NO DATABASE ============
+// This version uses hardcoded test data to show the UI without needing a backend
+
+let currentUser = { id: 1, username: 'carrie' };
+let selectedEventId = 'gala-2027-spring';
+let currentTab = 'overview';
+let isLoggedIn = false;
+
+const events = [
+  {
+    id: 'gala-2027-spring',
+    name: 'Spring Fundraiser Gala',
+    date: '2027-03-15',
+    location: 'The Meadows Venue, Greensboro, NC',
+    type: 'team',
+    status: 'in-progress',
+    budget_total: 5300,
+    budget_actual: 4275,
+    updated_at: '2026-09-06'
+  },
+  {
+    id: 'beach-bash-2027',
+    name: 'Beach Bash 2027 — "Party with Porpoise"',
+    date: '2027-07-17',
+    location: 'Wrightsville Beach, Wilmington, NC',
+    type: 'team',
+    status: 'pending',
+    budget_total: 0,
+    budget_actual: 0,
+    updated_at: '2026-09-06'
+  }
+];
+
+const tasks = [
+  { id: 'PERMIT-001', title: 'Submit city event permit', status: 'pending', due_date: '2026-10-15', priority: 'high' },
+  { id: 'VENDOR-001', title: 'Confirm primary caterer', status: 'pending', due_date: '2026-10-22', priority: 'high' },
+  { id: 'BUDGET-001', title: 'Finalize budget', status: 'in-progress', due_date: '2026-10-08', priority: 'high' },
+  { id: 'LOGISTICS-001', title: 'Confirm venue floor plan', status: 'pending', due_date: '2026-10-25', priority: 'high' },
+  { id: 'COMMS-001', title: 'Draft volunteer email', status: 'pending', due_date: '2026-10-01', priority: 'medium' },
+];
+
+const budget = [
+  { id: 1, category: 'Venue', budgeted_amount: 1500, actual_amount: 1500, status: 'on-track' },
+  { id: 2, category: 'Catering', budgeted_amount: 2000, actual_amount: 1950, status: 'on-track' },
+  { id: 3, category: 'AV & Tech', budgeted_amount: 600, actual_amount: 600, status: 'on-track' },
+  { id: 4, category: 'Permits & Insurance', budgeted_amount: 150, actual_amount: 150, status: 'on-track' },
+  { id: 5, category: 'Marketing & Comms', budgeted_amount: 150, actual_amount: 75, status: 'on-track' },
+];
+
+const vendors = [
+  { id: 1, name: 'Trenton Events', service: 'Catering', contact_phone: '336-555-0123', contact_email: 'info@trentonevents.com', status: 'confirmed' },
+  { id: 2, name: 'Clarity Audio', service: 'AV & Sound', contact_phone: '336-555-0456', contact_email: 'booking@clarityaudio.com', status: 'confirmed' },
+  { id: 3, name: 'The Meadows Venue', service: 'Venue', contact_phone: '336-555-0789', contact_email: 'events@themeadows.com', status: 'confirmed' },
+];
+
+const timeline = [
+  { id: 1, time: '4:00 PM', activity: 'Setup begins', owner: 'Sarah (Volunteer Lead)', notes: 'AV testing, table setup', sequence: 1 },
+  { id: 2, time: '5:30 PM', activity: 'Doors open', owner: 'Marcus', notes: 'Check-in & registration', sequence: 2 },
+  { id: 3, time: '6:00 PM', activity: 'Welcome remarks', owner: 'Carrie', notes: '10 mins', sequence: 3 },
+  { id: 4, time: '6:45 PM', activity: 'Catering begins', owner: 'Trenton Events', notes: '336-555-0123', sequence: 4 },
+  { id: 5, time: '7:45 PM', activity: 'Closing remarks', owner: 'Carrie', notes: '5 mins', sequence: 5 },
+  { id: 6, time: '8:30 PM', activity: 'Breakdown', owner: 'Team', notes: 'Complete by 9:15 PM', sequence: 6 },
+];
+
+const planningTimeline = [
+  { id: 1, week: 'Aug 17-23 (THIS WEEK)', focus: 'Email performers; send contract invitations; confirmed Boom Unit parade rate; got initial contracts from Rob', status: 'done' },
+  { id: 2, week: 'Aug 24-26 (pre-trip)', focus: 'Collected performer rates; got contracts out; Boom Unit $500 parade fee confirmed, pending committee approval', status: 'in-progress' },
+  { id: 3, week: 'Aug 27 - Sep 2 (Out of town)', focus: 'Toronto trip blocked out. Rob covering questions. All performer contracts sent before departure.', status: 'in-progress' },
+  { id: 4, week: 'Sep 3-6', focus: 'Back home: catch up on replies; collect rates; first contracts go out', status: 'pending' },
+  { id: 5, week: 'Sep 7-13', focus: 'All confirmed performers under contract; update Wix lineup; lock Drag Story Hour host', status: 'pending' },
+];
+
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  const username = document.getElementById('loginUsername').value;
+  if (username) {
+    currentUser.username = username;
+    isLoggedIn = true;
+    renderDashboard();
+  }
+}
+
+function renderLoginScreen() {
+  document.getElementById('app').innerHTML = `
+    <div class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center px-4">
+      <div class="max-w-md w-full">
+        <div class="bg-slate-800 border border-slate-700 rounded-lg p-8 shadow-2xl">
+          <h1 class="text-3xl font-light text-center mb-2">Event Planning Dashboard</h1>
+          <p class="text-slate-400 text-center mb-8">Interactive Demo (No Login Required)</p>
+          
+          <button onclick="handleLogin(new Event('submit'))" class="w-full bg-cyan-600 hover:bg-cyan-700 px-4 py-2 rounded font-medium">
+            Enter Demo
+          </button>
+
+          <input id="loginUsername" type="text" value="carrie" style="display:none;">
+
+          <div class="mt-8 pt-6 border-t border-slate-700 text-xs text-slate-400 text-center">
+            <p class="text-slate-300 font-medium mb-3">This interactive demo shows:</p>
+            <ul class="space-y-1.5 text-slate-400">
+              <li>✓ Multiple event management</li>
+              <li>✓ Planning timeline & run of show</li>
+              <li>✓ Budget tracking & variance</li>
+              <li>✓ Task & vendor management</li>
+              <li>✓ Fully editable interface</li>
+            </ul>
+            <p class="text-slate-500 mt-4 text-xs">Ready for your organization — no database setup needed to try it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderDashboard() {
+  const event = events[0];
+  const tasksCompleted = tasks.filter(t => t.status === 'done').length;
+  const budgetStatus = event.budget_actual <= event.budget_total 
+    ? { text: '✓ On Budget', color: 'text-emerald-600' }
+    : { text: '! Over Budget', color: 'text-red-600' };
+
+  document.getElementById('app').innerHTML = `
+    <div class="min-h-screen bg-slate-900 text-slate-100 flex flex-col">
+      <!-- Header -->
+      <header class="border-b border-slate-700 bg-slate-800 px-8 py-6">
+        <div class="flex items-center justify-between max-w-7xl mx-auto">
+          <h1 class="text-3xl font-light">Event Dashboard</h1>
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400">Welcome, ${currentUser.username}</span>
+            <button onclick="logout()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded text-sm">
+              Logout
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-72 border-r border-slate-700 bg-slate-800 overflow-y-auto">
+          <div class="p-6">
+            <h2 class="text-lg font-semibold mb-6">Events</h2>
+            <div class="space-y-3">
+              ${events.map(e => `
+                <button onclick="selectEvent('${e.id}')" 
+                  class="w-full text-left p-4 rounded-lg transition-colors ${
+                    selectedEventId === e.id 
+                      ? 'bg-slate-700 border-l-2 border-cyan-400' 
+                      : 'hover:bg-slate-700/50'
+                  }">
+                  <h3 class="font-medium text-sm">${e.name}</h3>
+                  <p class="text-xs text-slate-400 mt-1">${formatDate(e.date)}</p>
+                </button>
+              `).join('')}
+            </div>
+            <p class="text-xs text-slate-500 mt-8 px-4">📌 DEMO: Only 1 test event</p>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+          <div class="fade-in">
+            <!-- Event Header -->
+            <div class="border-b border-slate-700 bg-slate-800 sticky top-0 z-10">
+              <div class="max-w-6xl mx-auto px-8 py-8">
+                <h1 class="text-4xl font-light mb-4">${event.name}</h1>
+                <div class="flex gap-6 text-sm text-slate-300">
+                  <div>📅 ${formatDate(event.date)}</div>
+                  <div>📍 ${event.location}</div>
+                  <div class="px-3 py-1 rounded border border-slate-600 text-xs">${event.status}</div>
+                </div>
+              </div>
+
+              <!-- Tabs -->
+              <div class="border-t border-slate-700 flex max-w-6xl mx-auto">
+                ${['overview', 'planning-timeline', 'run-of-show', 'budget', 'tasks', 'vendors'].map(tab => `
+                  <button onclick="switchTab('${tab}')" 
+                    class="px-6 py-4 text-sm font-medium transition-colors border-b-2 ${
+                      currentTab === tab 
+                        ? 'border-cyan-400 text-cyan-400' 
+                        : 'border-transparent text-slate-400 hover:text-slate-300'
+                    }">
+                    ${tab.replace('-', ' ').split(' ').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="max-w-6xl mx-auto px-8 py-8">
+              ${currentTab === 'overview' ? `
+                <div class="grid grid-cols-3 gap-6">
+                  <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+                    <h3 class="text-sm font-medium text-slate-300 mb-4">Budget</h3>
+                    <div class="text-2xl font-light mb-2">$${event.budget_actual.toLocaleString()}</div>
+                    <div class="text-xs text-slate-400">of $${event.budget_total.toLocaleString()}</div>
+                    <div class="text-sm font-medium ${budgetStatus.color} mt-4">${budgetStatus.text}</div>
+                  </div>
+
+                  <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+                    <h3 class="text-sm font-medium text-slate-300 mb-4">Tasks</h3>
+                    <div class="text-2xl font-light mb-2">${tasksCompleted}/${tasks.length}</div>
+                    <div class="text-xs text-slate-400">${Math.round((tasksCompleted / tasks.length) * 100)}% complete</div>
+                  </div>
+
+                  <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+                    <h3 class="text-sm font-medium text-slate-300 mb-4">Vendors</h3>
+                    <div class="text-2xl font-light mb-2">${vendors.length}</div>
+                    <div class="text-xs text-slate-400">Confirmed: ${vendors.filter(v => v.status === 'confirmed').length}</div>
+                  </div>
+                </div>
+              ` : ''}
+
+              ${currentTab === 'planning-timeline' ? `
+                <div>
+                  <h2 class="text-2xl font-light mb-6">Planning Timeline</h2>
+                  <div class="space-y-3">
+                    ${planningTimeline.map(item => `
+                      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
+                        <div class="flex justify-between items-start">
+                          <div class="flex-1">
+                            <h4 class="font-medium text-cyan-400">${item.week}</h4>
+                            <p class="text-sm text-slate-300 mt-3 leading-relaxed">${item.focus}</p>
+                            <span class="inline-block text-xs px-2 py-1 rounded mt-3 ${
+                              item.status === 'done' ? 'bg-emerald-900/30 text-emerald-300' : 
+                              item.status === 'in-progress' ? 'bg-cyan-900/30 text-cyan-300' :
+                              'bg-amber-900/30 text-amber-300'
+                            }">
+                              ${item.status.replace('-', ' ')}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
+
+              ${currentTab === 'run-of-show' ? `
+                <div>
+                  <h2 class="text-2xl font-light mb-6">Event Timeline</h2>
+                  <div class="space-y-4">
+                    ${timeline.sort((a, b) => a.sequence - b.sequence).map(item => `
+                      <div class="flex gap-6 pb-6 border-b border-slate-700">
+                        <div class="w-24"><div class="font-medium text-cyan-400">${item.time}</div></div>
+                        <div class="flex-1">
+                          <h4 class="font-medium">${item.activity}</h4>
+                          <p class="text-sm text-slate-400 mt-1">${item.owner}</p>
+                          <p class="text-xs text-slate-500 mt-2">${item.notes || ''}</p>
+                        </div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
+
+              ${currentTab === 'budget' ? `
+                <div>
+                  <h2 class="text-2xl font-light mb-6">Budget Tracker</h2>
+                  <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                      <thead>
+                        <tr class="border-b border-slate-700">
+                          <th class="text-left py-3 px-4 font-medium text-slate-300">Category</th>
+                          <th class="text-right py-3 px-4 font-medium text-slate-300">Budgeted</th>
+                          <th class="text-right py-3 px-4 font-medium text-slate-300">Actual</th>
+                          <th class="text-right py-3 px-4 font-medium text-slate-300">Variance</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${budget.map(item => `
+                          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+                            <td class="py-4 px-4">${item.category}</td>
+                            <td class="text-right py-4 px-4">$${item.budgeted_amount}</td>
+                            <td class="text-right py-4 px-4">$${item.actual_amount}</td>
+                            <td class="text-right py-4 px-4 text-emerald-400">$${item.budgeted_amount - item.actual_amount}</td>
+                          </tr>
+                        `).join('')}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ` : ''}
+
+              ${currentTab === 'tasks' ? `
+                <div>
+                  <h2 class="text-2xl font-light mb-6">Tasks</h2>
+                  <div class="space-y-3">
+                    ${tasks.map(task => `
+                      <div class="flex items-center gap-4 p-4 bg-slate-800 border border-slate-700 rounded-lg hover:border-slate-600">
+                        <input type="checkbox" ${task.status === 'done' ? 'checked' : ''} class="w-5 h-5 cursor-pointer" disabled>
+                        <div class="flex-1">
+                          <h4 class="font-medium">${task.title}</h4>
+                          <p class="text-xs text-slate-400 mt-1">${task.id} • Due ${formatDate(task.due_date)}</p>
+                        </div>
+                        <span class="text-xs px-2 py-1 rounded ${
+                          task.priority === 'high' ? 'bg-red-900/30 text-red-300' : 'bg-slate-700 text-slate-300'
+                        }">
+                          ${task.priority}
+                        </span>
+                      </div>
+                    `).join('')}
+                  </div>
+                  <p class="text-xs text-slate-500 mt-6">📌 DEMO: Checkboxes are disabled (no database to save to)</p>
+                </div>
+              ` : ''}
+
+              ${currentTab === 'vendors' ? `
+                <div>
+                  <h2 class="text-2xl font-light mb-6">Vendors</h2>
+                  <div class="grid grid-cols-2 gap-6">
+                    ${vendors.map(vendor => `
+                      <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+                        <div class="flex items-start justify-between mb-4">
+                          <div>
+                            <h4 class="font-medium">${vendor.name}</h4>
+                            <p class="text-sm text-slate-400">${vendor.service}</p>
+                          </div>
+                          <span class="text-xs px-2 py-1 rounded ${
+                            vendor.status === 'confirmed' ? 'bg-emerald-900 text-emerald-300' : 'bg-amber-900 text-amber-300'
+                          }">
+                            ${vendor.status}
+                          </span>
+                        </div>
+                        <div class="space-y-2 text-sm text-slate-300">
+                          <div>📞 ${vendor.contact_phone}</div>
+                          <div>📧 ${vendor.contact_email}</div>
+                        </div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  `;
+}
+
+function selectEvent(eventId) {
+  selectedEventId = eventId;
+  currentTab = 'overview';
+  renderDashboard();
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  renderDashboard();
+}
+
+function logout() {
+  isLoggedIn = false;
+  currentTab = 'overview';
+  renderLoginScreen();
+}
+
+// Start
+if (isLoggedIn) {
+  renderDashboard();
+} else {
+  renderLoginScreen();
+}
+</script>
+
+</body>
+</html>
