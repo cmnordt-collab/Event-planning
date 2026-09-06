@@ -1,187 +1,211 @@
-# Event Dashboard - Quick Start (Local Testing)
+# Event Planning Dashboard — Quick Start Guide
 
-Run the complete event dashboard on your computer in 5 minutes.
-
----
-
-## What You Need
-
-- **Node.js 16+** (download from nodejs.org)
-- **SQL Server Express** (free, download from microsoft.com)
-  - OR use a free cloud SQL database (Azure SQL, etc.)
-  - OR skip the database for now and use the demo version
+Get the dashboard running locally on your computer in 5 minutes.
 
 ---
 
-## Step 1: Download These Files
+## **What You'll Need**
 
-You have 5 files in this folder:
-- `package.json`
-- `server.js`
-- `dashboard.html`
-- `schema.sql`
-- `.env`
-
-Copy this entire folder to your computer.
+- Node.js 14+ (download from https://nodejs.org/)
+- SQL Server Express (download from https://www.microsoft.com/en-us/sql-server/sql-server-express)
+- This repository cloned or downloaded
 
 ---
 
-## Step 2: Set Up the Database (Option A: Local SQL Server)
+## **Step 1: Install Node.js**
 
-1. Download and install **SQL Server Express** (free)
-   - https://www.microsoft.com/en-us/sql-server/sql-server-downloads
+1. Go to https://nodejs.org/
+2. Download the LTS version
+3. Run the installer, accept defaults
+4. Restart your computer
+5. Verify installation:
 
-2. Open **SQL Server Management Studio**
+Open Terminal/Command Prompt and run:
+node --version
+npm --version
 
-3. Connect to your local server
-
-4. Create a new database called `EventPlanning`:
-   ```sql
-   CREATE DATABASE EventPlanning;
-   ```
-
-5. Open `schema.sql` from this folder
-
-6. Copy and paste all the contents into a new query window
-
-7. Execute it (F5 or Ctrl+E)
-
-**Done!** Your database is set up.
+You should see version numbers. If you get "command not found", restart your computer.
 
 ---
 
-## Step 3: Create a Demo User
+## **Step 2: Install SQL Server Express**
 
-Still in SQL Server Management Studio, run this:
-
-```sql
-USE EventPlanning;
-
-INSERT INTO [users] ([username], [email], [password_hash])
-VALUES ('carrie', 'carrie@example.com', '$2b$10$YWJjZGVmZ2hpamtsbW5vcBdzQjEwLQ==');
--- Demo password: demo123 (pre-hashed)
-```
+1. Go to https://www.microsoft.com/en-us/sql-server/sql-server-express
+2. Download SQL Server Express
+3. Run installer
+4. Choose "Basic" installation (easiest)
+5. Accept defaults
+6. Note the instance name (usually "SQLEXPRESS")
 
 ---
 
-## Step 4: Update the `.env` File
+## **Step 3: Create the Database**
 
-Open `.env` in a text editor and update:
+1. After SQL Server installs, open SQL Server Management Studio (SSMS)
+   - Search for "SQL Server Management Studio" in Windows Start menu
+2. In the connection dialog:
+   - Server name: localhost\SQLEXPRESS
+   - Authentication: Windows Authentication
+   - Click Connect
+3. Right-click on "Databases" → New Database
+4. Name: EventPlanningDashboard
+5. Click OK
+6. Expand Databases → EventPlanningDashboard
+7. Right-click, select "New Query"
+8. Open schema.sql from this repository
+9. Copy all the SQL code
+10. Paste into the query window
+11. Click Execute (F5)
 
-```
+Wait for all tables to be created. You should see "Command(s) completed successfully."
+
+---
+
+## **Step 4: Clone the Repository**
+
+Open Terminal/Command Prompt and run:
+
+git clone https://github.com/cmnordt-collab/Event-planning.git
+cd Event-planning
+
+(If you don't have Git, just download the repository as a ZIP file and extract it)
+
+---
+
+## **Step 5: Create .env File**
+
+1. In the Event-planning folder, create a new file named .env
+2. Copy the contents of .env.example
+3. Replace the values:
+
 PORT=3000
-JWT_SECRET=my-super-secret-key-change-this
+NODE_ENV=development
 
-DB_SERVER=localhost
-DB_NAME=EventPlanning
+JWT_SECRET=MyTestSecretKey123
+
+DB_SERVER=localhost\SQLEXPRESS
+DB_NAME=EventPlanningDashboard
 DB_USER=sa
-DB_PASSWORD=YourPassword123!
-DB_ENCRYPT=false
-```
+DB_PASSWORD=YourSQLServerPassword
 
-Replace:
-- `YourPassword123!` with your SQL Server password (what you set during install)
-- `JWT_SECRET` with something random (doesn't matter for testing)
+Replace "YourSQLServerPassword" with the password you set during SQL Server installation.
+
+4. Save the file
 
 ---
 
-## Step 5: Start the Server
+## **Step 6: Install Dependencies**
 
-Open a terminal/command prompt in this folder and run:
+In Terminal/Command Prompt (in the Event-planning folder), run:
 
-```bash
 npm install
-```
 
-(This downloads all dependencies - takes 1-2 minutes)
+This downloads all the packages. Wait for it to finish (1-2 minutes).
 
-Then:
+---
 
-```bash
+## **Step 7: Start the Server**
+
+Still in Terminal/Command Prompt, run:
+
 npm start
-```
 
 You should see:
-```
 Connected to SQL Server
-Event Dashboard API running on http://localhost:3000
-```
+Server running on port 3000
+
+Leave this window open. The server stays running.
 
 ---
 
-## Step 6: Open the Dashboard
+## **Step 8: Open the Dashboard**
 
-Open your browser and go to:
+Open your web browser and go to:
 
-```
 http://localhost:3000/dashboard
-```
 
-You should see the **login screen**.
+You should see the login screen.
 
-Log in with:
-- Username: `carrie`
-- Password: `demo123`
-
----
-
-## Step 7: Test It
-
-Once logged in:
-- Click on "Spring Fundraiser Gala" (test event)
-- Click the **Tasks** tab
-- Click a task checkbox - it should update
-- Switch to **Budget** tab and see the data
-- Try all the tabs
-
-**Everything should work!**
+Login with:
+Username: carrie
+Password: demo123
 
 ---
 
-## If Something Goes Wrong
+## **Step 9: Explore the Dashboard**
 
-### "npm: command not found"
-- Node.js isn't installed. Download from nodejs.org and restart terminal.
-
-### "Cannot connect to database"
-- Check SQL Server is running (look in Windows Services)
-- Verify password in `.env` matches your SQL Server password
-- Make sure you created the database
-
-### "Port 3000 already in use"
-- Change `PORT` in `.env` to `3001` or `3002`
-
-### "Login failed"
-- Check you inserted the demo user in step 3
-- Verify username is `carrie` and password is `demo123`
+- Click on "Spring Fundraiser Gala" event
+- Try each tab: Overview, Planning Timeline, Run of Show, Budget, Tasks, Vendors
+- Click "Edit" on any item to test inline editing
+- Changes save to the database instantly
 
 ---
 
-## Stop the Server
+## **Troubleshooting**
 
-Press `Ctrl+C` in the terminal.
+### **"Cannot connect to SQL Server"**
+
+Make sure:
+- SQL Server is running (check Services in Windows)
+- DB_SERVER in .env matches your SQL Server instance name
+- DB_PASSWORD is correct
+- Database "EventPlanningDashboard" exists
+
+### **"Port 3000 already in use"**
+
+Change PORT in .env to 3001 or another number, save, and restart npm start
+
+### **"Cannot find module 'mssql'"**
+
+Run:
+npm install
+
+Again, make sure it completes without errors.
+
+### **"npm: command not found"**
+
+Node.js not installed. Go back to Step 1 and restart your computer after installing.
+
+### **Dashboard shows but login fails**
+
+- Verify schema.sql was executed (check in SSMS that tables exist)
+- Verify .env values are correct
+- Check that SQL Server is running
 
 ---
 
-## Now What?
+## **Stop the Server**
 
-Once it's running and you like how it looks:
-
-1. **Tweak the dashboard** - I can help modify the UI, add features, change colors
-2. **Test more scenarios** - Create more test events, try different workflows
-3. **Share with your contact** - Once you're happy, give them the code and `DEPLOYMENT.md`
+Press Ctrl+C in the Terminal window where npm start is running.
 
 ---
 
-## Option B: Skip the Database (Demo Mode Only)
+## **Next Time You Use It**
 
-If you don't want to set up SQL Server, I can create a **demo version** that:
-- Shows the full UI
-- Has hardcoded test data
-- Doesn't save changes (but shows what it looks like)
+1. Open Terminal/Command Prompt
+2. Navigate to Event-planning folder:
 
-Let me know if you want that instead!
+cd Event-planning
+
+3. Run:
+
+npm start
+
+4. Open browser to http://localhost:3000/dashboard
 
 ---
 
-Questions? Let me know and we can troubleshoot together.
+## **Need Help?**
+
+Check these files:
+- README-DASHBOARD.md — What the dashboard does
+- DEPLOYMENT.md — Production setup
+- CLAUDE.md — Project details
+
+---
+
+## **When You're Ready for Production**
+
+Follow DEPLOYMENT.md for setting up on a real server with proper hosting.
+
+Happy planning!
