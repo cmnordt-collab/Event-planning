@@ -2,76 +2,113 @@
   "tasks": [
     {
       "id": "PERMIT-001",
-      "title": "Submit city event permit application",
+      "title": "Submit city event permit",
       "status": "pending",
-      "dueDate": "2026-10-15",
+      "due_date": "2026-10-15",
       "priority": "high",
       "owner": "Carrie",
-      "category": "Permits & Legal",
+      "category": "permits",
       "dependencies": [],
-      "notes": "City requires 30 days lead time. Check if weekend waiver needed."
+      "notes": "Contact city planning department, submit form 48-A, allow 2-3 weeks for processing"
     },
     {
       "id": "VENDOR-001",
-      "title": "Confirm primary caterer / food vendors",
+      "title": "Confirm primary caterer",
       "status": "pending",
-      "dueDate": "2026-10-22",
+      "due_date": "2026-10-22",
       "priority": "high",
-      "owner": "Carrie",
-      "category": "Vendors",
+      "owner": "Rob",
+      "category": "vendors",
       "dependencies": ["BUDGET-001"],
-      "notes": "Needs final headcount and dietary restrictions list."
+      "notes": "Get final headcount, confirm dietary restrictions, finalize menu"
     },
     {
       "id": "BUDGET-001",
-      "title": "Finalize event budget and sponsor commitments",
+      "title": "Finalize budget",
       "status": "in-progress",
-      "dueDate": "2026-10-08",
+      "due_date": "2026-10-08",
       "priority": "high",
-      "owner": "Carrie",
-      "category": "Finance",
+      "owner": "Finance",
+      "category": "finance",
       "dependencies": [],
-      "notes": "Waiting on grant confirmation. Track all in-kind donations."
+      "notes": "Collect all vendor quotes, build preliminary budget, present to committee"
     },
     {
       "id": "LOGISTICS-001",
-      "title": "Confirm venue floor plan and AV needs",
+      "title": "Confirm venue floor plan",
       "status": "pending",
-      "dueDate": "2026-10-25",
+      "due_date": "2026-10-25",
       "priority": "high",
-      "owner": "Carrie",
-      "category": "Logistics",
-      "dependencies": ["PERMIT-001"],
-      "notes": "Power outlets, WiFi, parking requirements. Document in run_of_show.md."
+      "owner": "Logistics",
+      "category": "logistics",
+      "dependencies": ["VENDOR-001"],
+      "notes": "Get floor plan from venue, map table layouts, identify AV placement"
     },
     {
       "id": "COMMS-001",
-      "title": "Draft volunteer recruitment email",
+      "title": "Draft volunteer email",
       "status": "pending",
-      "dueDate": "2026-10-01",
+      "due_date": "2026-10-01",
       "priority": "medium",
       "owner": "Carrie",
-      "category": "Communications",
+      "category": "communications",
       "dependencies": [],
-      "notes": "Roles: registration, setup, breakdown, vendor liaison."
+      "notes": "Create email template, include roles, responsibilities, day-of schedule"
     },
     {
-      "id": "TEAM-001",
-      "title": "Schedule planning kickoff meeting (if team event)",
+      "id": "AV-001",
+      "title": "Confirm AV vendor and tech specs",
       "status": "pending",
-      "dueDate": "2026-09-25",
+      "due_date": "2026-10-20",
+      "priority": "high",
+      "owner": "Carrie",
+      "category": "vendors",
+      "dependencies": ["LOGISTICS-001"],
+      "notes": "Confirm sound system, microphones, projector if needed, backup power"
+    },
+    {
+      "id": "INSUR-001",
+      "title": "Obtain event liability insurance",
+      "status": "pending",
+      "due_date": "2026-10-10",
+      "priority": "high",
+      "owner": "Finance",
+      "category": "permits",
+      "dependencies": [],
+      "notes": "Get quotes from 2-3 providers, confirm coverage amount, submit application"
+    },
+    {
+      "id": "VOLUN-001",
+      "title": "Recruit and confirm volunteers",
+      "status": "pending",
+      "due_date": "2026-10-18",
       "priority": "medium",
       "owner": "Carrie",
-      "category": "Team Coordination",
+      "category": "volunteers",
+      "dependencies": ["COMMS-001"],
+      "notes": "Aim for 8-10 volunteers, create role assignments, confirm attendance 1 week before"
+    },
+    {
+      "id": "MARK-001",
+      "title": "Finalize and distribute invitations",
+      "status": "pending",
+      "due_date": "2026-09-25",
+      "priority": "high",
+      "owner": "Marketing",
+      "category": "communications",
       "dependencies": [],
-      "notes": "Only applies to team-led events. Skip for solo/consultant work."
+      "notes": "Print/digital invites, include date/time/location/RSVP details, send to full list"
+    },
+    {
+      "id": "ACCOM-001",
+      "title": "Confirm accommodations for out-of-town guests",
+      "status": "pending",
+      "due_date": "2026-10-12",
+      "priority": "medium",
+      "owner": "Rob",
+      "category": "logistics",
+      "dependencies": [],
+      "notes": "Block hotel rooms, get group rate, create list of nearby hotels with directions"
     }
-  ],
-  "metadata": {
-    "lastUpdated": "2026-09-06T00:00:00Z",
-    "eventName": "[Event Name]",
-    "eventDate": "[Event Date]",
-    "eventLocation": "[Location]",
-    "eventType": "team|solo|consultant"
-  }
+  ]
 }
