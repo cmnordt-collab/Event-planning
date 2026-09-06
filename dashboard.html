@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Planning Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        input, textarea { background: #1e293b; border-color: #334155; color: #e2e8f0; }
+        input:focus, textarea:focus { outline: none; border-color: #06b6d4; background: #0f172a; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100">
+
+<div id="app"></div>
+
+<script>
+const API_URL = 'http://localhost:3000/api';
+let authToken = localStorage.getItem('authToken');
+let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+let events = [];
+let selectedEventId = null;
+let currentTab = 'overview';
+
+// ============ LOGIN SCREEN ============
+
+function renderLoginScreen() {
+  document.getElementById('app').innerHTML = `
+    <div class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center px-4">
+      <div class="max-w-md w-full">
+        <div class="bg-slate-800 border border-slate-700 rounded-lg p-8 shadow-2xl">
+          <h1 class="text-3xl font-light text-center mb-2">Event Dashboard</h1>
+          <p class="text-slate-400 text-center mb-8">Private event planning</p>
+          
+          <form onsubmit="handleLogin(event)" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-2">Username</label>
+              <input id="loginUsername" type="text" class="w-full px-4 py-2 rounded border" required>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Password</label>
+              <input id="loginPassword" type="password" class="w-full px-4 py-2 rounded border" required>
+            </div>
+            <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 px-4 py-2 rounded font-medium mt-6">
+              Sign In
+            </button>
+          </form>
+
+          <p id="loginError" class="text-red-400 text-sm mt-4 text-center hidden"></p>
+
+          <div class="mt-8 pt-6 border-t border-slate-700 text-xs text-slate-400 text-center">
+            <p><strong>Demo Credentials:</strong></p>
+            <p>Username: carrie</p>
+            <p>Password: demo123</p>
+            <p class="mt-2 text-slate-500">(Set up real users in database)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function handleLogin(event) {
+  event.preventDefault();
+  
+  const username = document.getElementById('loginUsername').value;
+  const password = document.getElementById('loginPassword').value;
+  const errorEl = document.getElementById('loginError');
+  
+  try {
+    const response = await fetch(`${API_URL}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+
+    if (!response.ok) {
+      throw new Error('Invalid username or password');
+    }
+
+    const data = await response.json();
+    authToken = data.token;
+    currentUser = data.user;
+    
+    localStorage.setItem('authToken', authToken);
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    
+    renderDashboard();
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.classList.remove('hidden');
+  }
+}
+
+// ============ DASHBOARD ============
+
+async function renderDashboard() {
+  if (!authToken) {
+    renderLoginScreen();
+    return;
+  }
+
+  // Fetch events
+  try {
+    const response = await fetch(`${API_URL}/events`, {
+      headers: { 'Authorization': `Bearer ${authToken}` }
+    });
+
+    if (response.status === 401) {
+      authToken = null;
+      currentUser = null;
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('currentUser');
+      renderLoginScreen();
+      return;
+    }
+
+    events = await response.json();
+    if (!selectedEventId && events.length > 0) {
+      selectedEventId = events[0].id;
+    }
+  } catch (err) {
+    console.error('Error fetching events:', err);
+  }
+
+  document.getElementById('app').innerHTML = `
+    <div class="min-h-screen bg-slate-900 text-slate-100 flex flex-col">
+      <!-- Header -->
+      <header class="border-b border-slate-700 bg-slate-800 px-8 py-6">
+        <div class="flex items-center justify-between max-w-7xl mx-auto">
+          <h1 class="text-3xl font-light">Event Dashboard</h1>
+          <div class="flex items-center gap-4">
+            <span class="text-slate-400">Welcome, ${currentUser.username}</span>
+            <button onclick="handleLogout()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded text-sm">
+              Logout
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-72 border-r border-slate-700 bg-slate-800 overflow-y-auto">
+          <div class="p-6">
+            <h2 class="text-lg font-semibold mb-6">Events</h2>
+            <div class="space-y-3">
+              ${events.map(event => `
+                <button onclick="selectEvent('${event.id}')" 
+                  class="w-full text-left p-4 rounded-lg transition-colors ${
+                    selectedEventId === event.id 
+                      ? 'bg-slate-700 border-l-2 border-cyan-400' 
+                      : 'hover:bg-slate-700/50'
+                  }">
+                  <h3 class="font-medium text-sm">${event.name}</h3>
+                  <p class="text-xs text-slate-400 mt-1">${formatDate(event.date)}</p>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto" id="mainContent"></main>
+      </div>
+    </div>
+  `;
+
+  if (selectedEventId) {
+    renderEventDetail();
+  }
+}
+
+async function renderEventDetail() {
+  if (!selectedEventId) return;
+
+  try {
+    const response = await fetch(`${API_URL}/events/${selectedEventId}`, {
+      headers: { 'Authorization': `Bearer ${authToken}` }
+    });
+
+    if (!response.ok) throw new Error('Failed to fetch event');
+
+    const eventData = await response.json();
+    const event = eventData.event;
+    const tasks = eventData.tasks;
+    const budget = eventData.budget;
+    const vendors = eventData.vendors;
+    const timeline = eventData.timeline;
+
+    const mainContent = document.getElementById('mainContent');
+    
+    const tasksCompleted = tasks.filter(t => t.status === 'done').length;
+    const budgetStatus = event.budget_actual <= event.budget_total 
+      ? { text: '✓ On Budget', color: 'text-emerald-600' }
+      : { text: '! Over Budget', color: 'text-red-600' };
+
+    mainContent.innerHTML = `
+      <div class="fade-in">
+        <!-- Event Header -->
+        <div class="border-b border-slate-700 bg-slate-800 sticky top-0 z-10">
+          <div class="max-w-6xl mx-auto px-8 py-8">
+            <h1 class="text-4xl font-light mb-4">${event.name}</h1>
+            <div class="flex gap-6 text-sm text-slate-300">
+              <div>📅 ${formatDate(event.date)}</div>
+              <div>📍 ${event.location}</div>
+              <div class="px-3 py-1 rounded border border-slate-600 text-xs">${event.status}</div>
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="border-t border-slate-700 flex max-w-6xl mx-auto">
+            ${['overview', 'run-of-show', 'budget', 'tasks', 'vendors'].map(tab => `
+              <button onclick="switchTab('${tab}')" 
+                class="px-6 py-4 text-sm font-medium transition-colors border-b-2 ${
+                  currentTab === tab 
+                    ? 'border-cyan-400 text-cyan-400' 
+                    : 'border-transparent text-slate-400 hover:text-slate-300'
+                }">
+                ${tab.replace('-', ' ').split(' ').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="max-w-6xl mx-auto px-8 py-8">
+          ${currentTab === 'overview' ? `
+            <div class="grid grid-cols-3 gap-6">
+              <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+                <h3 class="text-sm font-medium text-slate-300 mb-4">Budget</h3>
+                <div class="text-2xl font-light mb-2">$${event.budget_actual?.toLocaleString() || 0}</div>
+                <div class="text-xs text-slate-400">of $${event.budget_total?.toLocaleString() || 0}</div>
+                <div class="text-sm font-medium ${budgetStatus.color} mt-4">${budgetStatus.text}</div>
+              </div>
+
+              <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+                <h3 class="text-sm font-medium text-slate-300 mb-4">Tasks</h3>
+                <div class="text-2xl font-light mb-2">${tasksCompleted}/${tasks.length}</div>
+                <div class="text-xs text-slate-400">${Math.round((tasksCompleted / tasks.length) * 100)}% complete</div>
+              </div>
+
+              <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+                <h3 class="text-sm font-medium text-slate-300 mb-4">Vendors</h3>
+                <div class="text-2xl font-light mb-2">${vendors.length}</div>
+                <div class="text-xs text-slate-400">Confirmed: ${vendors.filter(v => v.status === 'confirmed').length}</div>
+              </div>
+            </div>
+          ` : ''}
+
+          ${currentTab === 'run-of-show' ? `
+            <div>
+              <h2 class="text-2xl font-light mb-6">Event Timeline</h2>
+              <div class="space-y-4">
+                ${timeline.sort((a, b) => a.sequence - b.sequence).map(item => `
+                  <div class="flex gap-6 pb-6 border-b border-slate-700">
+                    <div class="w-24"><div class="font-medium text-cyan-400">${item.time}</div></div>
+                    <div class="flex-1">
+                      <h4 class="font-medium">${item.activity}</h4>
+                      <p class="text-sm text-slate-400 mt-1">${item.owner}</p>
+                      <p class="text-xs text-slate-500 mt-2">${item.notes || ''}</p>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+
+          ${currentTab === 'budget' ? `
+            <div>
+              <h2 class="text-2xl font-light mb-6">Budget Tracker</h2>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="border-b border-slate-700">
+                      <th class="text-left py-3 px-4 font-medium text-slate-300">Category</th>
+                      <th class="text-right py-3 px-4 font-medium text-slate-300">Budgeted</th>
+                      <th class="text-right py-3 px-4 font-medium text-slate-300">Actual</th>
+                      <th class="text-right py-3 px-4 font-medium text-slate-300">Variance</th>
+                      <th class="text-left py-3 px-4 font-medium text-slate-300">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${budget.map(item => `
+                      <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+                        <td class="py-4 px-4">${item.category}</td>
+                        <td class="text-right py-4 px-4">$${item.budgeted_amount}</td>
+                        <td class="text-right py-4 px-4">$${item.actual_amount || 0}</td>
+                        <td class="text-right py-4 px-4 text-emerald-400">$${item.budgeted_amount - (item.actual_amount || 0)}</td>
+                        <td class="py-4 px-4">
+                          <span class="text-xs px-2 py-1 rounded ${
+                            item.status === 'on-track' ? 'bg-emerald-900 text-emerald-300' : 'bg-slate-700 text-slate-300'
+                          }">
+                            ${item.status}
+                          </span>
+                        </td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ` : ''}
+
+          ${currentTab === 'tasks' ? `
+            <div>
+              <h2 class="text-2xl font-light mb-6">Tasks</h2>
+              <div class="space-y-3">
+                ${tasks.map(task => `
+                  <div class="flex items-center gap-4 p-4 bg-slate-800 border border-slate-700 rounded-lg hover:border-slate-600">
+                    <input type="checkbox" ${task.status === 'done' ? 'checked' : ''} 
+                      onchange="updateTaskStatus('${task.id}', this.checked ? 'done' : 'pending')"
+                      class="w-5 h-5 cursor-pointer">
+                    <div class="flex-1">
+                      <h4 class="font-medium">${task.title}</h4>
+                      <p class="text-xs text-slate-400 mt-1">${task.id} • Due ${formatDate(task.due_date)}</p>
+                    </div>
+                    <span class="text-xs px-2 py-1 rounded ${
+                      task.priority === 'high' ? 'bg-red-900/30 text-red-300' : 'bg-slate-700 text-slate-300'
+                    }">
+                      ${task.priority}
+                    </span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+
+          ${currentTab === 'vendors' ? `
+            <div>
+              <h2 class="text-2xl font-light mb-6">Vendors</h2>
+              <div class="grid grid-cols-2 gap-6">
+                ${vendors.map(vendor => `
+                  <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+                    <div class="flex items-start justify-between mb-4">
+                      <div>
+                        <h4 class="font-medium">${vendor.name}</h4>
+                        <p class="text-sm text-slate-400">${vendor.service}</p>
+                      </div>
+                      <span class="text-xs px-2 py-1 rounded ${
+                        vendor.status === 'confirmed' ? 'bg-emerald-900 text-emerald-300' : 'bg-amber-900 text-amber-300'
+                      }">
+                        ${vendor.status}
+                      </span>
+                    </div>
+                    <div class="space-y-2 text-sm text-slate-300">
+                      <div>📞 ${vendor.contact_phone || 'N/A'}</div>
+                      <div>📧 ${vendor.contact_email || 'N/A'}</div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    console.error('Error rendering event:', err);
+    document.getElementById('mainContent').innerHTML = `<div class="p-8 text-red-400">Error loading event details</div>`;
+  }
+}
+
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function selectEvent(eventId) {
+  selectedEventId = eventId;
+  currentTab = 'overview';
+  renderEventDetail();
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  renderEventDetail();
+}
+
+async function updateTaskStatus(taskId, status) {
+  try {
+    await fetch(`${API_URL}/tasks/${taskId}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ status })
+    });
+    renderEventDetail();
+  } catch (err) {
+    console.error('Error updating task:', err);
+  }
+}
+
+function handleLogout() {
+  authToken = null;
+  currentUser = null;
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('currentUser');
+  renderLoginScreen();
+}
+
+// Initialize
+if (authToken && currentUser) {
+  renderDashboard();
+} else {
+  renderLoginScreen();
+}
+</script>
+
+</body>
+</html>
