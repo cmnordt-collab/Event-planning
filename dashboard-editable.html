@@ -207,13 +207,13 @@ async function renderEventDetail() {
             </div>
           </div>
 
-          <div class="border-t border-slate-700 flex max-w-6xl mx-auto">
+          <div class="bg-slate-800 border-t border-slate-700 flex max-w-6xl mx-auto">
             ${['overview', 'planning-timeline', 'run-of-show', 'budget', 'tasks', 'vendors'].map(tab => `
               <button onclick="switchTab('${tab}')" 
                 class="px-6 py-4 text-sm font-medium transition-colors border-b-2 ${
                   currentTab === tab 
                     ? 'border-cyan-400 text-cyan-400' 
-                    : 'border-transparent text-slate-400 hover:text-slate-300'
+                    : 'border-transparent text-slate-300 hover:text-cyan-300'
                 }">
                 ${tab.replace('-', ' ').split(' ').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}
               </button>
@@ -266,56 +266,55 @@ async function renderEventDetail() {
 // ============ PLANNING TIMELINE ============
 
 function renderPlanningTimeline(timeline) {
+  // For now, use event timeline data as planning timeline (we'll expand DB schema later)
   const planningData = [
     { id: 1, week: 'Aug 17-23 (THIS WEEK)', focus: 'Email Victor re: Aris (confirmed 8/25); sent all performer contract/invitation emails; replied to Brannon (Boom Unit) on the parade rate; got Bear Roots/Wes/Emily/DJ Mouse contracts from Rob and sent them, plus Hummingbird; sent Victor\'s contract', status: 'done' },
     { id: 2, week: 'Aug 24-26 (pre-trip)', focus: 'Collected rates for most performers and got contracts out (see this week\'s row). Boom Unit\'s $500 parade fee is confirmed by Brannon, pending committee approval', status: 'in-progress' },
     { id: 3, week: 'Aug 27 - Sep 2 (Toronto trip)', focus: 'Blocked out — everything lands before or after it, with urgent items front-loaded into the next 10 days', status: 'pending' },
   ];
 
-  return `
+  return \`
     <div>
       <h2 class="text-2xl font-light mb-6">Planning Timeline</h2>
       <div class="space-y-3">
-        ${planningData.map(item => `
-          <div id="planning-${item.id}" class="editable-row bg-slate-800 border border-slate-700 rounded-lg p-4">
-            ${editingId === `planning-${item.id}` ? `
+        \${planningData.map(item => \`
+          <div id="planning-\${item.id}" class="editable-row bg-slate-800 border border-slate-700 rounded-lg p-4">
+            \${editingId === \`planning-\${item.id}\` ? \`
               <div class="space-y-3">
-                <input id="edit-week-${item.id}" type="text" value="${item.week}" placeholder="Week (e.g., Aug 17-23)" class="w-full px-3 py-2 rounded border font-medium">
-                <textarea id="edit-focus-${item.id}" placeholder="Focus & Hard Deadlines" class="w-full px-3 py-2 rounded border h-24">${item.focus}</textarea>
-                <select id="edit-planning-status-${item.id}" class="w-full px-3 py-2 rounded border">
-                  <option value="pending" ${item.status === 'pending' ? 'selected' : ''}>Pending</option>
-                  <option value="in-progress" ${item.status === 'in-progress' ? 'selected' : ''}>In Progress</option>
-                  <option value="done" ${item.status === 'done' ? 'selected' : ''}>Done</option>
+                <input id="edit-week-\${item.id}" type="text" value="\${item.week}" placeholder="Week (e.g., Aug 17-23)" class="w-full px-3 py-2 rounded border font-medium">
+                <textarea id="edit-focus-\${item.id}" placeholder="Focus & Hard Deadlines" class="w-full px-3 py-2 rounded border h-24">\${item.focus}</textarea>
+                <select id="edit-planning-status-\${item.id}" class="w-full px-3 py-2 rounded border">
+                  <option value="pending" \${item.status === 'pending' ? 'selected' : ''}>Pending</option>
+                  <option value="in-progress" \${item.status === 'in-progress' ? 'selected' : ''}>In Progress</option>
+                  <option value="done" \${item.status === 'done' ? 'selected' : ''}>Done</option>
                 </select>
                 <div class="flex gap-2">
-                  <button onclick="savePlanningItem(${item.id})" class="px-3 py-2 bg-cyan-600 hover:bg-cyan-700 rounded text-sm">Save</button>
-                  <button onclick="cancelEdit('planning-${item.id}')" class="px-3 py-2 bg-slate-600 hover:bg-slate-500 rounded text-sm">Cancel</button>
+                  <button onclick="savePlanningItem(\${item.id})" class="px-3 py-2 bg-cyan-600 hover:bg-cyan-700 rounded text-sm">Save</button>
+                  <button onclick="cancelEdit('planning-\${item.id}')" class="px-3 py-2 bg-slate-600 hover:bg-slate-500 rounded text-sm">Cancel</button>
                 </div>
               </div>
-            ` : `
+            \` : \`
               <div class="flex justify-between items-start">
                 <div class="flex-1">
-                  <h4 class="font-medium text-cyan-400">${item.week}</h4>
-                  <p class="text-sm text-slate-300 mt-3 leading-relaxed">${item.focus}</p>
-                  <span class="inline-block text-xs px-2 py-1 rounded mt-3 ${
+                  <h4 class="font-medium text-cyan-400">\${item.week}</h4>
+                  <p class="text-sm text-slate-300 mt-3 leading-relaxed">\${item.focus}</p>
+                  <span class="inline-block text-xs px-2 py-1 rounded mt-3 \${
                     item.status === 'done' ? 'bg-emerald-900/30 text-emerald-300' : 
                     item.status === 'in-progress' ? 'bg-cyan-900/30 text-cyan-300' :
                     'bg-amber-900/30 text-amber-300'
                   }">
-                    ${item.status.replace('-', ' ')}
+                    \${item.status.replace('-', ' ')}
                   </span>
                 </div>
-                <button onclick="startEdit('planning-${item.id}')" class="px-3 py-1 text-xs bg-slate-700 hover:bg-slate-600 rounded">Edit</button>
+                <button onclick="startEdit('planning-\${item.id}')" class="px-3 py-1 text-xs bg-slate-700 hover:bg-slate-600 rounded">Edit</button>
               </div>
-            `}
+            \`}
           </div>
-        `).join('')}
+        \`).join('')}
       </div>
     </div>
-  `;
+  \`;
 }
-
-// ============ RUN OF SHOW ============
 
 function renderRunOfShow(timeline) {
   return `
@@ -324,7 +323,7 @@ function renderRunOfShow(timeline) {
       <div class="space-y-3">
         ${timeline.sort((a, b) => a.sequence - b.sequence).map(item => `
           <div id="timeline-${item.id}" class="editable-row bg-slate-800 border border-slate-700 rounded-lg p-4">
-            ${editingId === `timeline-${item.id}` ? `
+            ${editingId === \`timeline-\${item.id}\` ? `
               <div class="space-y-3">
                 <input id="edit-time-${item.id}" type="text" value="${item.time}" placeholder="Time" class="w-full px-3 py-2 rounded border text-sm">
                 <input id="edit-activity-${item.id}" type="text" value="${item.activity}" placeholder="Activity" class="w-full px-3 py-2 rounded border">
@@ -362,7 +361,7 @@ function renderBudget(budget) {
       <div class="space-y-2">
         ${budget.map(item => `
           <div id="budget-${item.id}" class="editable-row bg-slate-800 border border-slate-700 rounded-lg p-4">
-            ${editingId === `budget-${item.id}` ? `
+            ${editingId === \`budget-\${item.id}\` ? `
               <div class="space-y-3">
                 <input id="edit-category-${item.id}" type="text" value="${item.category}" placeholder="Category" class="w-full px-3 py-2 rounded border">
                 <div class="grid grid-cols-2 gap-2">
@@ -405,7 +404,7 @@ function renderTasks(tasks) {
       <div class="space-y-2">
         ${tasks.map(task => `
           <div id="task-${task.id}" class="editable-row bg-slate-800 border border-slate-700 rounded-lg p-4">
-            ${editingId === `task-${task.id}` ? `
+            ${editingId === \`task-\${task.id}\` ? `
               <div class="space-y-3">
                 <input id="edit-title-${task.id}" type="text" value="${task.title}" placeholder="Task title" class="w-full px-3 py-2 rounded border">
                 <div class="grid grid-cols-2 gap-2">
@@ -460,7 +459,7 @@ function renderVendors(vendors) {
       <div class="grid grid-cols-2 gap-4">
         ${vendors.map(vendor => `
           <div id="vendor-${vendor.id}" class="editable-row bg-slate-800 border border-slate-700 rounded-lg p-4">
-            ${editingId === `vendor-${vendor.id}` ? `
+            ${editingId === \`vendor-\${vendor.id}\` ? `
               <div class="space-y-3">
                 <input id="edit-name-${vendor.id}" type="text" value="${vendor.name}" placeholder="Vendor name" class="w-full px-3 py-2 rounded border">
                 <input id="edit-service-${vendor.id}" type="text" value="${vendor.service}" placeholder="Service" class="w-full px-3 py-2 rounded border">
@@ -514,6 +513,12 @@ function cancelEdit(id) {
 }
 
 async function savePlanningItem(id) {
+  const week = document.getElementById(`edit-week-${id}`).value;
+  const focus = document.getElementById(`edit-focus-${id}`).value;
+  const status = document.getElementById(`edit-planning-status-${id}`).value;
+
+  // This would save to database when deployed
+  // For now, just close edit mode
   editingId = null;
   renderEventDetail();
 }
