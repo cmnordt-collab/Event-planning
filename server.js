@@ -238,18 +238,20 @@ app.put('/api/budget/:budgetId', authenticate, async (req, res) => {
 // 6. Update Vendor Status
 app.put('/api/vendors/:vendorId', authenticate, async (req, res) => {
   const { vendorId } = req.params;
-  const { status, contact_phone, contact_email, notes } = req.body;
+  const { status, contact_phone, contact_email, notes, name, service } = req.body;
 
   try {
     await pool.request()
       .input('vendorId', sql.Int, vendorId)
+      .input('name', sql.NVarChar, name)
+      .input('service', sql.NVarChar, service)
       .input('status', sql.NVarChar, status)
       .input('phone', sql.NVarChar, contact_phone)
       .input('email', sql.NVarChar, contact_email)
       .input('notes', sql.NVarChar, notes)
       .query(`
         UPDATE vendors
-        SET status = @status, contact_phone = @phone, contact_email = @email, notes = @notes, updated_at = GETDATE()
+        SET name = @name, service = @service, status = @status, contact_phone = @phone, contact_email = @email, notes = @notes, updated_at = GETDATE()
         WHERE id = @vendorId
       `);
 
@@ -257,6 +259,31 @@ app.put('/api/vendors/:vendorId', authenticate, async (req, res) => {
   } catch (err) {
     console.error('Update vendor error:', err);
     res.status(500).json({ error: 'Failed to update vendor' });
+  }
+});
+
+// 7. Update Timeline Item
+app.put('/api/timeline/:timelineId', authenticate, async (req, res) => {
+  const { timelineId } = req.params;
+  const { time, activity, owner, notes } = req.body;
+
+  try {
+    await pool.request()
+      .input('timelineId', sql.Int, timelineId)
+      .input('time', sql.NVarChar, time)
+      .input('activity', sql.NVarChar, activity)
+      .input('owner', sql.NVarChar, owner)
+      .input('notes', sql.NVarChar, notes)
+      .query(`
+        UPDATE timeline_items
+        SET time = @time, activity = @activity, owner = @owner, notes = @notes, updated_at = GETDATE()
+        WHERE id = @timelineId
+      `);
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Update timeline error:', err);
+    res.status(500).json({ error: 'Failed to update timeline' });
   }
 });
 
