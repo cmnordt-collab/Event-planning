@@ -1,0 +1,77 @@
+{
+  "tasks": [
+    {
+      "id": "PERMIT-001",
+      "title": "Submit city event permit application",
+      "status": "pending",
+      "dueDate": "2026-10-15",
+      "priority": "high",
+      "owner": "Carrie",
+      "category": "Permits & Legal",
+      "dependencies": [],
+      "notes": "City requires 30 days lead time. Check if weekend waiver needed."
+    },
+    {
+      "id": "VENDOR-001",
+      "title": "Confirm primary caterer / food vendors",
+      "status": "pending",
+      "dueDate": "2026-10-22",
+      "priority": "high",
+      "owner": "Carrie",
+      "category": "Vendors",
+      "dependencies": ["BUDGET-001"],
+      "notes": "Needs final headcount and dietary restrictions list."
+    },
+    {
+      "id": "BUDGET-001",
+      "title": "Finalize event budget and sponsor commitments",
+      "status": "in-progress",
+      "dueDate": "2026-10-08",
+      "priority": "high",
+      "owner": "Carrie",
+      "category": "Finance",
+      "dependencies": [],
+      "notes": "Waiting on grant confirmation. Track all in-kind donations."
+    },
+    {
+      "id": "LOGISTICS-001",
+      "title": "Confirm venue floor plan and AV needs",
+      "status": "pending",
+      "dueDate": "2026-10-25",
+      "priority": "high",
+      "owner": "Carrie",
+      "category": "Logistics",
+      "dependencies": ["PERMIT-001"],
+      "notes": "Power outlets, WiFi, parking requirements. Document in run_of_show.md."
+    },
+    {
+      "id": "COMMS-001",
+      "title": "Draft volunteer recruitment email",
+      "status": "pending",
+      "dueDate": "2026-10-01",
+      "priority": "medium",
+      "owner": "Carrie",
+      "category": "Communications",
+      "dependencies": [],
+      "notes": "Roles: registration, setup, breakdown, vendor liaison."
+    },
+    {
+      "id": "TEAM-001",
+      "title": "Schedule planning kickoff meeting (if team event)",
+      "status": "pending",
+      "dueDate": "2026-09-25",
+      "priority": "medium",
+      "owner": "Carrie",
+      "category": "Team Coordination",
+      "dependencies": [],
+      "notes": "Only applies to team-led events. Skip for solo/consultant work."
+    }
+  ],
+  "metadata": {
+    "lastUpdated": "2026-09-06T00:00:00Z",
+    "eventName": "[Event Name]",
+    "eventDate": "[Event Date]",
+    "eventLocation": "[Location]",
+    "eventType": "team|solo|consultant"
+  }
+}
