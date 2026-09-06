@@ -4,13 +4,167 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Planning Dashboard - Demo</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .min-h-screen { min-height: 100vh; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .flex-1 { flex: 1; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .px-8 { padding-left: 2rem; padding-right: 2rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-3 { margin-top: 0.75rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .mt-8 { margin-top: 2rem; }
+        .space-y-1 > * + * { margin-top: 0.25rem; }
+        .space-y-2 > * + * { margin-top: 0.5rem; }
+        .space-y-3 > * + * { margin-top: 0.75rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .space-y-6 > * + * { margin-top: 1.5rem; }
+        .space-y-1-5 > * + * { margin-top: 0.375rem; }
+
+        .text-sm { font-size: 0.875rem; }
+        .text-xs { font-size: 0.75rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .text-3xl { font-size: 1.875rem; }
+        .text-4xl { font-size: 2.25rem; }
+        
+        .font-light { font-weight: 300; }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+
+        .w-full { width: 100%; }
+        .w-24 { width: 6rem; }
+        .w-72 { width: 18rem; }
+        .max-w-md { max-width: 28rem; }
+        .max-w-6xl { max-width: 72rem; }
+
+        .bg-slate-900 { background: #0f172a; }
+        .bg-slate-800 { background: #1e293b; }
+        .bg-slate-700 { background: #334155; }
+        .bg-slate-600 { background: #475569; }
+        .bg-cyan-600 { background: #0891b2; }
+        .bg-cyan-700 { background: #0e7490; }
+        .bg-emerald-900 { background: #064e3b; }
+        .bg-red-900 { background: #7f1d1d; }
+        .bg-amber-900 { background: #78350f; }
+        .bg-emerald-900-30 { background: rgba(6, 78, 59, 0.3); }
+        .bg-cyan-900-30 { background: rgba(4, 120, 140, 0.3); }
+        .bg-amber-900-30 { background: rgba(120, 53, 15, 0.3); }
+
+        .text-slate-100 { color: #f1f5f9; }
+        .text-slate-300 { color: #cbd5e1; }
+        .text-slate-400 { color: #94a3b8; }
+        .text-slate-500 { color: #64748b; }
+        .text-cyan-300 { color: #06b6d4; }
+        .text-cyan-400 { color: #06b6d4; }
+        .text-emerald-300 { color: #6ee7b7; }
+        .text-red-300 { color: #fca5a5; }
+        .text-amber-300 { color: #fcd34d; }
+
+        .border { border: 1px solid #334155; }
+        .border-b { border-bottom: 1px solid #334155; }
+        .border-t { border-top: 1px solid #334155; }
+        .border-r { border-right: 1px solid #334155; }
+        .border-l-2 { border-left: 2px solid #06b6d4; }
+        .border-cyan-400 { border-color: #06b6d4; }
+        .border-slate-700 { border-color: #334155; }
+        .border-slate-600 { border-color: #475569; }
+
+        .rounded { border-radius: 0.25rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+
+        .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+
+        .overflow-hidden { overflow: hidden; }
+        .overflow-y-auto { overflow-y: auto; }
+
+        header { border-bottom: 1px solid #334155; background: #1e293b; }
+        aside { border-right: 1px solid #334155; background: #1e293b; }
+        main { background: #0f172a; }
+
+        button { 
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        button:hover { opacity: 0.9; }
+        .bg-cyan-600:hover { background: #0e7490; }
+        .bg-slate-700:hover { background: #475569; }
+        
+        input, textarea, select {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #e2e8f0;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.25rem;
+            font-family: inherit;
+            font-size: 0.875rem;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #06b6d4;
+            background: #0f172a;
+        }
+
         .fade-in { animation: fadeIn 0.3s ease-in; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        input, textarea { background: #1e293b; border-color: #334155; color: #e2e8f0; }
-        input:focus, textarea:focus { outline: none; border-color: #06b6d4; background: #0f172a; }
+
+        .editable-row { transition: background-color 0.2s; }
+        .editable-row:hover { background-color: rgba(30, 41, 59, 0.5); }
+
+        .sticky { position: sticky; }
+        .top-0 { top: 0; }
+        .z-10 { z-index: 10; }
+
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #334155; }
+        th { font-weight: 500; color: #cbd5e1; }
+
+        .h-2 { height: 0.5rem; }
+        .h-16 { height: 4rem; }
+        .h-24 { height: 6rem; }
+
+        .leading-relaxed { line-height: 1.625; }
+
+        .inline-block { display: inline-block; }
+
+        .gradient-to-br { background: linear-gradient(to bottom right, #0f172a, #1e293b); }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100">
@@ -18,9 +172,6 @@
 <div id="app"></div>
 
 <script>
-// ============ DEMO MODE - NO DATABASE ============
-// This version uses hardcoded test data to show the UI without needing a backend
-
 let currentUser = { id: 1, username: 'carrie' };
 let selectedEventId = 'gala-2027-spring';
 let currentTab = 'overview';
@@ -96,38 +247,33 @@ function formatDate(dateStr) {
 
 function handleLogin(e) {
   e.preventDefault();
-  const username = document.getElementById('loginUsername').value;
-  if (username) {
-    currentUser.username = username;
-    isLoggedIn = true;
-    renderDashboard();
-  }
+  currentUser.username = 'carrie';
+  isLoggedIn = true;
+  renderDashboard();
 }
 
 function renderLoginScreen() {
   document.getElementById('app').innerHTML = `
-    <div class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center px-4">
+    <div class="min-h-screen flex flex-col items-center justify-center px-4 gradient-to-br">
       <div class="max-w-md w-full">
         <div class="bg-slate-800 border border-slate-700 rounded-lg p-8 shadow-2xl">
           <h1 class="text-3xl font-light text-center mb-2">Event Planning Dashboard</h1>
           <p class="text-slate-400 text-center mb-8">Interactive Demo (No Login Required)</p>
           
-          <button onclick="handleLogin(new Event('submit'))" class="w-full bg-cyan-600 hover:bg-cyan-700 px-4 py-2 rounded font-medium">
+          <button onclick="handleLogin(new Event('submit'))" class="w-full bg-cyan-600 text-white px-4 py-2 rounded mb-8">
             Enter Demo
           </button>
 
-          <input id="loginUsername" type="text" value="carrie" style="display:none;">
-
-          <div class="mt-8 pt-6 border-t border-slate-700 text-xs text-slate-400 text-center">
-            <p class="text-slate-300 font-medium mb-3">This interactive demo shows:</p>
-            <ul class="space-y-1.5 text-slate-400">
+          <div class="border-t border-slate-700 pt-6">
+            <p class="text-slate-300 font-medium mb-3 text-center">This interactive demo shows:</p>
+            <ul class="space-y-1-5 text-slate-400 text-xs text-center">
               <li>✓ Multiple event management</li>
               <li>✓ Planning timeline & run of show</li>
               <li>✓ Budget tracking & variance</li>
               <li>✓ Task & vendor management</li>
               <li>✓ Fully editable interface</li>
             </ul>
-            <p class="text-slate-500 mt-4 text-xs">Ready for your organization — no database setup needed to try it.</p>
+            <p class="text-slate-500 mt-4 text-xs text-center">Ready for your organization — no database setup needed to try it.</p>
           </div>
         </div>
       </div>
@@ -136,226 +282,232 @@ function renderLoginScreen() {
 }
 
 function renderDashboard() {
-  const event = events[0];
-  const tasksCompleted = tasks.filter(t => t.status === 'done').length;
-  const budgetStatus = event.budget_actual <= event.budget_total 
-    ? { text: '✓ On Budget', color: 'text-emerald-600' }
-    : { text: '! Over Budget', color: 'text-red-600' };
+  const eventsList = events.map(event => `
+    <button onclick="selectEvent('${event.id}')" 
+      class="w-full text-left p-4 rounded-lg mb-3 transition-colors ${
+        selectedEventId === event.id 
+          ? 'bg-slate-700 border-l-2 border-cyan-400' 
+          : 'bg-slate-700 hover:opacity-80'
+      }">
+      <h3 class="font-medium text-sm">${event.name}</h3>
+      <p class="text-xs text-slate-400 mt-1">${formatDate(event.date)}</p>
+    </button>
+  `).join('');
 
   document.getElementById('app').innerHTML = `
-    <div class="min-h-screen bg-slate-900 text-slate-100 flex flex-col">
-      <!-- Header -->
-      <header class="border-b border-slate-700 bg-slate-800 px-8 py-6">
+    <div class="min-h-screen flex flex-col">
+      <header class="border-b border-slate-700 px-8 py-6">
         <div class="flex items-center justify-between max-w-7xl mx-auto">
           <h1 class="text-3xl font-light">Event Dashboard</h1>
           <div class="flex items-center gap-4">
             <span class="text-slate-400">Welcome, ${currentUser.username}</span>
-            <button onclick="logout()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded text-sm">
-              Logout
-            </button>
+            <button onclick="handleLogout()" class="px-4 py-2 bg-slate-700 text-sm rounded">Logout</button>
           </div>
         </div>
       </header>
 
       <div class="flex flex-1 overflow-hidden">
-        <!-- Sidebar -->
         <aside class="w-72 border-r border-slate-700 bg-slate-800 overflow-y-auto">
           <div class="p-6">
             <h2 class="text-lg font-semibold mb-6">Events</h2>
-            <div class="space-y-3">
-              ${events.map(e => `
-                <button onclick="selectEvent('${e.id}')" 
-                  class="w-full text-left p-4 rounded-lg transition-colors ${
-                    selectedEventId === e.id 
-                      ? 'bg-slate-700 border-l-2 border-cyan-400' 
-                      : 'hover:bg-slate-700/50'
-                  }">
-                  <h3 class="font-medium text-sm">${e.name}</h3>
-                  <p class="text-xs text-slate-400 mt-1">${formatDate(e.date)}</p>
-                </button>
-              `).join('')}
-            </div>
-            <p class="text-xs text-slate-500 mt-8 px-4">📌 DEMO: Only 1 test event</p>
+            <div>${eventsList}</div>
           </div>
         </aside>
 
-        <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto">
-          <div class="fade-in">
-            <!-- Event Header -->
-            <div class="border-b border-slate-700 bg-slate-800 sticky top-0 z-10">
-              <div class="max-w-6xl mx-auto px-8 py-8">
-                <h1 class="text-4xl font-light mb-4">${event.name}</h1>
-                <div class="flex gap-6 text-sm text-slate-300">
-                  <div>📅 ${formatDate(event.date)}</div>
-                  <div>📍 ${event.location}</div>
-                  <div class="px-3 py-1 rounded border border-slate-600 text-xs">${event.status}</div>
-                </div>
-              </div>
+        <main class="flex-1 overflow-y-auto" id="mainContent"></main>
+      </div>
+    </div>
+  `;
 
-              <!-- Tabs -->
-              <div class="border-t border-slate-700 flex max-w-6xl mx-auto">
-                ${['overview', 'planning-timeline', 'run-of-show', 'budget', 'tasks', 'vendors'].map(tab => `
-                  <button onclick="switchTab('${tab}')" 
-                    class="px-6 py-4 text-sm font-medium transition-colors border-b-2 ${
-                      currentTab === tab 
-                        ? 'border-cyan-400 text-cyan-400' 
-                        : 'border-transparent text-slate-400 hover:text-slate-300'
-                    }">
-                    ${tab.replace('-', ' ').split(' ').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}
-                  </button>
-                `).join('')}
-              </div>
+  if (selectedEventId) {
+    renderEventDetail();
+  }
+}
+
+function renderEventDetail() {
+  const event = events.find(e => e.id === selectedEventId);
+  if (!event) return;
+
+  const tasksCompleted = tasks.filter(t => t.status === 'done').length;
+  const budgetStatus = event.budget_actual <= event.budget_total && event.budget_total > 0
+    ? { text: '✓ On Budget', color: 'text-emerald-300' }
+    : event.budget_total === 0 
+    ? { text: '○ Empty', color: 'text-slate-400' }
+    : { text: '! Over Budget', color: 'text-red-300' };
+
+  const mainContent = document.getElementById('mainContent');
+
+  mainContent.innerHTML = `
+    <div class="fade-in">
+      <div class="border-b border-slate-700 bg-slate-800 sticky top-0 z-10">
+        <div class="max-w-6xl mx-auto px-8 py-8">
+          <h1 class="text-4xl font-light mb-4">${event.name}</h1>
+          <div class="flex gap-6 text-sm text-slate-300">
+            <div>📅 ${formatDate(event.date)}</div>
+            <div>📍 ${event.location}</div>
+            <div class="px-3 py-1 rounded border border-slate-600 text-xs">${event.status}</div>
+          </div>
+        </div>
+
+        <div class="border-t border-slate-700 flex max-w-6xl mx-auto">
+          ${['overview', 'planning-timeline', 'run-of-show', 'budget', 'tasks', 'vendors'].map(tab => `
+            <button onclick="switchTab('${tab}')" 
+              class="px-6 py-4 text-sm font-medium transition-colors border-b-2 ${
+                currentTab === tab 
+                  ? 'border-cyan-400 text-cyan-400' 
+                  : 'border-transparent text-slate-400'
+              }">
+              ${tab.replace('-', ' ').split(' ').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="max-w-6xl mx-auto px-8 py-8">
+        ${currentTab === 'overview' ? `
+          <div class="grid grid-cols-3 gap-6">
+            <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+              <h3 class="text-sm font-medium text-slate-300 mb-4">Budget</h3>
+              <div class="text-2xl font-light mb-2">$${event.budget_actual?.toLocaleString() || 0}</div>
+              <div class="text-xs text-slate-400">of $${event.budget_total?.toLocaleString() || 0}</div>
+              <div class="text-sm font-medium ${budgetStatus.color} mt-4">${budgetStatus.text}</div>
             </div>
 
-            <!-- Content -->
-            <div class="max-w-6xl mx-auto px-8 py-8">
-              ${currentTab === 'overview' ? `
-                <div class="grid grid-cols-3 gap-6">
-                  <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
-                    <h3 class="text-sm font-medium text-slate-300 mb-4">Budget</h3>
-                    <div class="text-2xl font-light mb-2">$${event.budget_actual.toLocaleString()}</div>
-                    <div class="text-xs text-slate-400">of $${event.budget_total.toLocaleString()}</div>
-                    <div class="text-sm font-medium ${budgetStatus.color} mt-4">${budgetStatus.text}</div>
-                  </div>
+            <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+              <h3 class="text-sm font-medium text-slate-300 mb-4">Tasks</h3>
+              <div class="text-2xl font-light mb-2">${tasksCompleted}/${tasks.length}</div>
+              <div class="text-xs text-slate-400">${tasks.length > 0 ? Math.round((tasksCompleted / tasks.length) * 100) : 0}% complete</div>
+            </div>
 
-                  <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
-                    <h3 class="text-sm font-medium text-slate-300 mb-4">Tasks</h3>
-                    <div class="text-2xl font-light mb-2">${tasksCompleted}/${tasks.length}</div>
-                    <div class="text-xs text-slate-400">${Math.round((tasksCompleted / tasks.length) * 100)}% complete</div>
-                  </div>
-
-                  <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
-                    <h3 class="text-sm font-medium text-slate-300 mb-4">Vendors</h3>
-                    <div class="text-2xl font-light mb-2">${vendors.length}</div>
-                    <div class="text-xs text-slate-400">Confirmed: ${vendors.filter(v => v.status === 'confirmed').length}</div>
-                  </div>
-                </div>
-              ` : ''}
-
-              ${currentTab === 'planning-timeline' ? `
-                <div>
-                  <h2 class="text-2xl font-light mb-6">Planning Timeline</h2>
-                  <div class="space-y-3">
-                    ${planningTimeline.map(item => `
-                      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
-                        <div class="flex justify-between items-start">
-                          <div class="flex-1">
-                            <h4 class="font-medium text-cyan-400">${item.week}</h4>
-                            <p class="text-sm text-slate-300 mt-3 leading-relaxed">${item.focus}</p>
-                            <span class="inline-block text-xs px-2 py-1 rounded mt-3 ${
-                              item.status === 'done' ? 'bg-emerald-900/30 text-emerald-300' : 
-                              item.status === 'in-progress' ? 'bg-cyan-900/30 text-cyan-300' :
-                              'bg-amber-900/30 text-amber-300'
-                            }">
-                              ${item.status.replace('-', ' ')}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    `).join('')}
-                  </div>
-                </div>
-              ` : ''}
-
-              ${currentTab === 'run-of-show' ? `
-                <div>
-                  <h2 class="text-2xl font-light mb-6">Event Timeline</h2>
-                  <div class="space-y-4">
-                    ${timeline.sort((a, b) => a.sequence - b.sequence).map(item => `
-                      <div class="flex gap-6 pb-6 border-b border-slate-700">
-                        <div class="w-24"><div class="font-medium text-cyan-400">${item.time}</div></div>
-                        <div class="flex-1">
-                          <h4 class="font-medium">${item.activity}</h4>
-                          <p class="text-sm text-slate-400 mt-1">${item.owner}</p>
-                          <p class="text-xs text-slate-500 mt-2">${item.notes || ''}</p>
-                        </div>
-                      </div>
-                    `).join('')}
-                  </div>
-                </div>
-              ` : ''}
-
-              ${currentTab === 'budget' ? `
-                <div>
-                  <h2 class="text-2xl font-light mb-6">Budget Tracker</h2>
-                  <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                      <thead>
-                        <tr class="border-b border-slate-700">
-                          <th class="text-left py-3 px-4 font-medium text-slate-300">Category</th>
-                          <th class="text-right py-3 px-4 font-medium text-slate-300">Budgeted</th>
-                          <th class="text-right py-3 px-4 font-medium text-slate-300">Actual</th>
-                          <th class="text-right py-3 px-4 font-medium text-slate-300">Variance</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        ${budget.map(item => `
-                          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-                            <td class="py-4 px-4">${item.category}</td>
-                            <td class="text-right py-4 px-4">$${item.budgeted_amount}</td>
-                            <td class="text-right py-4 px-4">$${item.actual_amount}</td>
-                            <td class="text-right py-4 px-4 text-emerald-400">$${item.budgeted_amount - item.actual_amount}</td>
-                          </tr>
-                        `).join('')}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              ` : ''}
-
-              ${currentTab === 'tasks' ? `
-                <div>
-                  <h2 class="text-2xl font-light mb-6">Tasks</h2>
-                  <div class="space-y-3">
-                    ${tasks.map(task => `
-                      <div class="flex items-center gap-4 p-4 bg-slate-800 border border-slate-700 rounded-lg hover:border-slate-600">
-                        <input type="checkbox" ${task.status === 'done' ? 'checked' : ''} class="w-5 h-5 cursor-pointer" disabled>
-                        <div class="flex-1">
-                          <h4 class="font-medium">${task.title}</h4>
-                          <p class="text-xs text-slate-400 mt-1">${task.id} • Due ${formatDate(task.due_date)}</p>
-                        </div>
-                        <span class="text-xs px-2 py-1 rounded ${
-                          task.priority === 'high' ? 'bg-red-900/30 text-red-300' : 'bg-slate-700 text-slate-300'
-                        }">
-                          ${task.priority}
-                        </span>
-                      </div>
-                    `).join('')}
-                  </div>
-                  <p class="text-xs text-slate-500 mt-6">📌 DEMO: Checkboxes are disabled (no database to save to)</p>
-                </div>
-              ` : ''}
-
-              ${currentTab === 'vendors' ? `
-                <div>
-                  <h2 class="text-2xl font-light mb-6">Vendors</h2>
-                  <div class="grid grid-cols-2 gap-6">
-                    ${vendors.map(vendor => `
-                      <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
-                        <div class="flex items-start justify-between mb-4">
-                          <div>
-                            <h4 class="font-medium">${vendor.name}</h4>
-                            <p class="text-sm text-slate-400">${vendor.service}</p>
-                          </div>
-                          <span class="text-xs px-2 py-1 rounded ${
-                            vendor.status === 'confirmed' ? 'bg-emerald-900 text-emerald-300' : 'bg-amber-900 text-amber-300'
-                          }">
-                            ${vendor.status}
-                          </span>
-                        </div>
-                        <div class="space-y-2 text-sm text-slate-300">
-                          <div>📞 ${vendor.contact_phone}</div>
-                          <div>📧 ${vendor.contact_email}</div>
-                        </div>
-                      </div>
-                    `).join('')}
-                  </div>
-                </div>
-              ` : ''}
+            <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+              <h3 class="text-sm font-medium text-slate-300 mb-4">Vendors</h3>
+              <div class="text-2xl font-light mb-2">${vendors.length}</div>
+              <div class="text-xs text-slate-400">Confirmed: ${vendors.filter(v => v.status === 'confirmed').length}</div>
             </div>
           </div>
-        </main>
+        ` : ''}
+
+        ${currentTab === 'planning-timeline' ? `
+          <div>
+            <h2 class="text-2xl font-light mb-6">Planning Timeline</h2>
+            <div class="space-y-3">
+              ${planningTimeline.map(item => `
+                <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
+                  <h4 class="font-medium text-cyan-400">${item.week}</h4>
+                  <p class="text-sm text-slate-300 mt-3 leading-relaxed">${item.focus}</p>
+                  <span class="inline-block text-xs px-2 py-1 rounded mt-3 ${
+                    item.status === 'done' ? 'bg-emerald-900-30 text-emerald-300' : 
+                    item.status === 'in-progress' ? 'bg-cyan-900-30 text-cyan-300' :
+                    'bg-amber-900-30 text-amber-300'
+                  }">
+                    ${item.status.replace('-', ' ')}
+                  </span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+
+        ${currentTab === 'run-of-show' ? `
+          <div>
+            <h2 class="text-2xl font-light mb-6">Event Timeline</h2>
+            <div class="space-y-4">
+              ${timeline.sort((a, b) => a.sequence - b.sequence).map(item => `
+                <div class="flex gap-6 pb-6 border-b border-slate-700">
+                  <div class="w-24"><div class="font-medium text-cyan-400">${item.time}</div></div>
+                  <div class="flex-1">
+                    <h4 class="font-medium">${item.activity}</h4>
+                    <p class="text-sm text-slate-400 mt-1">${item.owner}</p>
+                    <p class="text-xs text-slate-500 mt-2">${item.notes || ''}</p>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+
+        ${currentTab === 'budget' ? `
+          <div>
+            <h2 class="text-2xl font-light mb-6">Budget Tracker</h2>
+            <table class="text-sm">
+              <thead>
+                <tr class="border-b border-slate-700">
+                  <th class="text-left py-3 px-4 font-medium text-slate-300">Category</th>
+                  <th class="text-right py-3 px-4 font-medium text-slate-300">Budgeted</th>
+                  <th class="text-right py-3 px-4 font-medium text-slate-300">Actual</th>
+                  <th class="text-right py-3 px-4 font-medium text-slate-300">Variance</th>
+                  <th class="text-left py-3 px-4 font-medium text-slate-300">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${budget.map(item => `
+                  <tr class="border-b border-slate-700">
+                    <td class="py-4 px-4">${item.category}</td>
+                    <td class="text-right py-4 px-4">$${item.budgeted_amount}</td>
+                    <td class="text-right py-4 px-4">$${item.actual_amount || 0}</td>
+                    <td class="text-right py-4 px-4 text-emerald-300">$${item.budgeted_amount - (item.actual_amount || 0)}</td>
+                    <td class="py-4 px-4">
+                      <span class="text-xs px-2 py-1 rounded ${
+                        item.status === 'on-track' ? 'bg-emerald-900-30 text-emerald-300' : 'bg-slate-700 text-slate-300'
+                      }">
+                        ${item.status}
+                      </span>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        ` : ''}
+
+        ${currentTab === 'tasks' ? `
+          <div>
+            <h2 class="text-2xl font-light mb-6">Tasks</h2>
+            <div class="space-y-3">
+              ${tasks.map(task => `
+                <div class="flex items-center gap-4 p-4 bg-slate-800 border border-slate-700 rounded-lg">
+                  <input type="checkbox" ${task.status === 'done' ? 'checked' : ''} class="w-5 h-2 cursor-pointer">
+                  <div class="flex-1">
+                    <h4 class="font-medium">${task.title}</h4>
+                    <p class="text-xs text-slate-400 mt-1">${task.id} • Due ${formatDate(task.due_date)}</p>
+                  </div>
+                  <span class="text-xs px-2 py-1 rounded ${
+                    task.priority === 'high' ? 'bg-red-900 text-red-300' : 'bg-slate-700 text-slate-300'
+                  }">
+                    ${task.priority}
+                  </span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+
+        ${currentTab === 'vendors' ? `
+          <div>
+            <h2 class="text-2xl font-light mb-6">Vendors</h2>
+            <div class="grid grid-cols-2 gap-6">
+              ${vendors.map(vendor => `
+                <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+                  <div class="flex items-start justify-between mb-4">
+                    <div>
+                      <h4 class="font-medium">${vendor.name}</h4>
+                      <p class="text-sm text-slate-400">${vendor.service}</p>
+                    </div>
+                    <span class="text-xs px-2 py-1 rounded ${
+                      vendor.status === 'confirmed' ? 'bg-emerald-900-30 text-emerald-300' : 'bg-amber-900-30 text-amber-300'
+                    }">
+                      ${vendor.status}
+                    </span>
+                  </div>
+                  <div class="space-y-2 text-sm text-slate-300">
+                    <div>📞 ${vendor.contact_phone}</div>
+                    <div>📧 ${vendor.contact_email}</div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
       </div>
     </div>
   `;
@@ -364,21 +516,20 @@ function renderDashboard() {
 function selectEvent(eventId) {
   selectedEventId = eventId;
   currentTab = 'overview';
-  renderDashboard();
+  renderEventDetail();
 }
 
 function switchTab(tab) {
   currentTab = tab;
-  renderDashboard();
+  renderEventDetail();
 }
 
-function logout() {
+function handleLogout() {
   isLoggedIn = false;
   currentTab = 'overview';
   renderLoginScreen();
 }
 
-// Start
 if (isLoggedIn) {
   renderDashboard();
 } else {
