@@ -33,8 +33,8 @@ Claude assists with:
 - Works from GitHub Pages
 - Hardcoded test data (Spring Gala + Beach Bash 2027)
 - Changes don't persist
-- Shared with prospects (Chatham Pride, West End, Lavender Social Collective, etc.)
-- URL: https://cmnordt-collab.github.io/Event-planning/dashboard-demo.html
+- - Shared with prospects (Chatham Pride, West End, Lavender Social Collective, etc.)
++ - Shared with prospective clients via the landing page- URL: https://cmnordt-collab.github.io/Event-planning/dashboard-demo.html
 
 ### **Production Version: `dashboard-editable.html`**
 - JWT login + password auth
