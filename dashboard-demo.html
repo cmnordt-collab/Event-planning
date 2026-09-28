@@ -181,76 +181,158 @@
 
 <script>
 let currentUser = { id: 1, username: 'carrie' };
-let selectedEventId = 'gala-2027-spring';
+let selectedEventId = 'festival-2027';
 let currentTab = 'overview';
 let isLoggedIn = true;
 
 const events = [
   {
-    id: 'gala-2027-spring',
-    name: 'Spring Fundraiser Gala',
-    date: '2027-03-15',
-    location: 'The Meadows Venue, Greensboro, NC',
+    id: 'festival-2027',
+    name: 'Spring Community Festival',
+    date: '2027-04-24',
+    location: 'Riverside Park, Chatham County, NC',
     type: 'team',
     status: 'in-progress',
-    budget_total: 5300,
-    budget_actual: 4275,
-    updated_at: '2026-09-06'
+    budget_total: 18500,
+    budget_actual: 11850,
+    updated_at: '2026-09-28'
   },
   {
-    id: 'beach-bash-2027',
-    name: 'Beach Bash 2027 — "Party with Porpoise"',
-    date: '2027-07-17',
-    location: 'Wrightsville Beach, Wilmington, NC',
+    id: 'workshop-2027',
+    name: 'Regional Policy Workshop (2 days)',
+    date: '2027-02-18',
+    location: 'University Conference Center, Raleigh, NC',
     type: 'team',
-    status: 'pending',
-    budget_total: 0,
-    budget_actual: 0,
-    updated_at: '2026-09-06'
+    status: 'in-progress',
+    budget_total: 24000,
+    budget_actual: 9600,
+    updated_at: '2026-09-28'
+  },
+  {
+    id: 'holiday-2026',
+    name: 'Volunteer Appreciation Holiday Dinner',
+    date: '2026-12-10',
+    location: 'Community Hall, Sanford, NC',
+    type: 'team',
+    status: 'in-progress',
+    budget_total: 4200,
+    budget_actual: 3950,
+    updated_at: '2026-09-28'
   }
 ];
 
-const tasks = [
-  { id: 'PERMIT-001', title: 'Submit city event permit', status: 'pending', due_date: '2026-10-15', priority: 'high' },
-  { id: 'VENDOR-001', title: 'Confirm primary caterer', status: 'pending', due_date: '2026-10-22', priority: 'high' },
-  { id: 'BUDGET-001', title: 'Finalize budget', status: 'in-progress', due_date: '2026-10-08', priority: 'high' },
-  { id: 'LOGISTICS-001', title: 'Confirm venue floor plan', status: 'pending', due_date: '2026-10-25', priority: 'high' },
-  { id: 'COMMS-001', title: 'Draft volunteer email', status: 'pending', due_date: '2026-10-01', priority: 'medium' },
-];
-
-const budget = [
-  { id: 1, category: 'Venue', budgeted_amount: 1500, actual_amount: 1500, status: 'on-track' },
-  { id: 2, category: 'Catering', budgeted_amount: 2000, actual_amount: 1950, status: 'on-track' },
-  { id: 3, category: 'AV & Tech', budgeted_amount: 600, actual_amount: 600, status: 'on-track' },
-  { id: 4, category: 'Permits & Insurance', budgeted_amount: 150, actual_amount: 150, status: 'on-track' },
-  { id: 5, category: 'Marketing & Comms', budgeted_amount: 150, actual_amount: 75, status: 'on-track' },
-];
-
-const vendors = [
-  { id: 1, name: 'Trenton Events', service: 'Catering', contact_phone: '336-555-0123', contact_email: 'info@trentonevents.com', status: 'confirmed' },
-  { id: 2, name: 'Clarity Audio', service: 'AV & Sound', contact_phone: '336-555-0456', contact_email: 'booking@clarityaudio.com', status: 'confirmed' },
-  { id: 3, name: 'The Meadows Venue', service: 'Venue', contact_phone: '336-555-0789', contact_email: 'events@themeadows.com', status: 'confirmed' },
-];
-
-const timeline = [
-  { id: 1, time: '4:00 PM', activity: 'Setup begins', owner: 'Sarah (Volunteer Lead)', notes: 'AV testing, table setup', sequence: 1 },
-  { id: 2, time: '5:30 PM', activity: 'Doors open', owner: 'Marcus', notes: 'Check-in & registration', sequence: 2 },
-  { id: 3, time: '6:00 PM', activity: 'Welcome remarks', owner: 'Carrie', notes: '10 mins', sequence: 3 },
-  { id: 4, time: '6:45 PM', activity: 'Catering begins', owner: 'Trenton Events', notes: '336-555-0123', sequence: 4 },
-  { id: 5, time: '7:45 PM', activity: 'Closing remarks', owner: 'Carrie', notes: '5 mins', sequence: 5 },
-  { id: 6, time: '8:30 PM', activity: 'Breakdown', owner: 'Team', notes: 'Complete by 9:15 PM', sequence: 6 },
-];
-
-const planningTimeline = [
-  { id: 1, week: 'Aug 17-23 (THIS WEEK)', focus: 'Email performers; send contract invitations; confirmed Boom Unit parade rate; got initial contracts from Rob', status: 'done' },
-  { id: 2, week: 'Aug 24-26 (pre-trip)', focus: 'Collected performer rates; got contracts out; Boom Unit $500 parade fee confirmed, pending committee approval', status: 'in-progress' },
-  { id: 3, week: 'Aug 27 - Sep 2 (Out of town)', focus: 'Toronto trip blocked out. Rob covering questions. All performer contracts sent before departure.', status: 'in-progress' },
-  { id: 4, week: 'Sep 3-6', focus: 'Back home: catch up on replies; collect rates; first contracts go out', status: 'pending' },
-  { id: 5, week: 'Sep 7-13', focus: 'All confirmed performers under contract; update Wix lineup; lock Drag Story Hour host', status: 'pending' },
-];
+const eventData = {
+  'festival-2027': {
+    tasks: [
+      { id: 'F-1', title: 'Submit special event permit to county', status: 'done', due_date: '2026-12-01', priority: 'high', owner: 'Carrie' },
+      { id: 'F-2', title: 'Sign tent and stage rental contract', status: 'in-progress', due_date: '2027-01-15', priority: 'high', owner: 'Carrie' },
+      { id: 'F-3', title: 'Open vendor and food truck applications', status: 'pending', due_date: '2027-02-01', priority: 'high', owner: 'Festival committee' },
+      { id: 'F-4', title: 'Recruit 60 day-of volunteers', status: 'pending', due_date: '2027-03-15', priority: 'medium', owner: 'Volunteer lead' },
+      { id: 'F-5', title: 'Finalize site map and accessibility plan', status: 'pending', due_date: '2027-04-01', priority: 'high', owner: 'Carrie' },
+      { id: 'F-6', title: 'Confirm portable restrooms and handwashing stations', status: 'pending', due_date: '2027-04-05', priority: 'medium', owner: 'Carrie' }
+    ],
+    budget: [
+      { id: 1, category: 'Tents, stage, and rentals', budgeted_amount: 7500, actual_amount: 7200, status: 'on-track' },
+      { id: 2, category: 'Sound and lighting', budgeted_amount: 4000, actual_amount: 3800, status: 'on-track' },
+      { id: 3, category: 'Performers', budgeted_amount: 3500, actual_amount: 0, status: 'pending' },
+      { id: 4, category: 'Permits and insurance', budgeted_amount: 1200, actual_amount: 850, status: 'on-track' },
+      { id: 5, category: 'Restrooms and waste', budgeted_amount: 1500, actual_amount: 0, status: 'pending' },
+      { id: 6, category: 'Signage and printing', budgeted_amount: 800, actual_amount: 0, status: 'pending' }
+    ],
+    vendors: [
+      { id: 1, name: 'Oakleaf Tent & Event Rentals', service: 'Tents and stage', contact_phone: '919-555-0142', contact_email: 'bookings@example.com', status: 'confirmed' },
+      { id: 2, name: 'Brightline Audio', service: 'Sound and lighting', contact_phone: '919-555-0187', contact_email: 'events@example.com', status: 'confirmed' },
+      { id: 3, name: 'Crossroads Portable Services', service: 'Restrooms and waste', contact_phone: '919-555-0163', contact_email: 'service@example.com', status: 'pending' }
+    ],
+    timeline: [
+      { id: 1, time: '7:30 AM', activity: 'Vendors check in', owner: 'Carrie', notes: 'Load-in by assigned zone', sequence: 1 },
+      { id: 2, time: '9:00 AM', activity: 'Volunteer briefing', owner: 'Volunteer lead', notes: 'Shirts, radios, and shift sheets at the info tent', sequence: 2 },
+      { id: 3, time: '10:30 AM', activity: 'Sound check, main stage', owner: 'Brightline Audio', notes: '919-555-0187', sequence: 3 },
+      { id: 4, time: '11:00 AM', activity: 'Gates open', owner: 'Gate team', notes: 'Wristbands and welcome table', sequence: 4 },
+      { id: 5, time: '2:00 PM', activity: 'Headline performance', owner: 'Stage manager', notes: '45 minutes', sequence: 5 },
+      { id: 6, time: '6:00 PM', activity: 'Teardown and vendor sign-out', owner: 'Carrie', notes: 'Site walk with park staff by 8:00 PM', sequence: 6 }
+    ],
+    planningTimeline: [
+      { id: 1, week: 'November', focus: 'Reserve park, submit county permit, confirm festival committee roles', status: 'done' },
+      { id: 2, week: 'December to January', focus: 'Book tents, stage, and sound; set budget with committee', status: 'in-progress' },
+      { id: 3, week: 'February', focus: 'Vendor and food truck applications open; performer outreach', status: 'pending' },
+      { id: 4, week: 'March', focus: 'Volunteer recruitment; signage and printing; site map draft', status: 'pending' },
+      { id: 5, week: 'April, festival month', focus: 'Final walkthrough, vendor load-in plan, run of show locked', status: 'pending' }
+    ]
+  },
+  'workshop-2027': {
+    tasks: [
+      { id: 'W-1', title: 'Contract conference center and meeting rooms', status: 'done', due_date: '2026-10-15', priority: 'high', owner: 'Carrie' },
+      { id: 'W-2', title: 'Negotiate hotel room block for 120 attendees', status: 'in-progress', due_date: '2026-11-01', priority: 'high', owner: 'Carrie' },
+      { id: 'W-3', title: 'Open attendee registration', status: 'pending', due_date: '2026-11-15', priority: 'high', owner: 'Program office' },
+      { id: 'W-4', title: 'Collect speaker bios and presentation files', status: 'pending', due_date: '2027-01-20', priority: 'medium', owner: 'Program office' },
+      { id: 'W-5', title: 'Arrange airport shuttles for out-of-state guests', status: 'pending', due_date: '2027-02-01', priority: 'medium', owner: 'Carrie' },
+      { id: 'W-6', title: 'Print badges and program booklets', status: 'pending', due_date: '2027-02-10', priority: 'medium', owner: 'Carrie' }
+    ],
+    budget: [
+      { id: 1, category: 'Venue and meeting rooms', budgeted_amount: 8000, actual_amount: 8000, status: 'on-track' },
+      { id: 2, category: 'Catering, two days', budgeted_amount: 9000, actual_amount: 0, status: 'pending' },
+      { id: 3, category: 'AV and livestream', budgeted_amount: 4000, actual_amount: 1600, status: 'on-track' },
+      { id: 4, category: 'Ground transportation', budgeted_amount: 2000, actual_amount: 0, status: 'pending' },
+      { id: 5, category: 'Printing and badges', budgeted_amount: 1000, actual_amount: 0, status: 'pending' }
+    ],
+    vendors: [
+      { id: 1, name: 'University Conference Center', service: 'Venue', contact_phone: '919-555-0110', contact_email: 'conferences@example.com', status: 'confirmed' },
+      { id: 2, name: 'Harvest Table Catering', service: 'Catering', contact_phone: '919-555-0175', contact_email: 'orders@example.com', status: 'pending' },
+      { id: 3, name: 'Triangle Shuttle Co.', service: 'Ground transportation', contact_phone: '919-555-0198', contact_email: 'dispatch@example.com', status: 'pending' }
+    ],
+    timeline: [
+      { id: 1, time: '7:30 AM', activity: 'Registration and breakfast', owner: 'Carrie', notes: 'Badges sorted alphabetically', sequence: 1 },
+      { id: 2, time: '8:30 AM', activity: 'Welcome and opening session', owner: 'Program director', notes: 'Livestream begins', sequence: 2 },
+      { id: 3, time: '10:15 AM', activity: 'Breakout sessions', owner: 'Room hosts', notes: 'Rooms A, B, and C', sequence: 3 },
+      { id: 4, time: '12:00 PM', activity: 'Working lunch', owner: 'Harvest Table Catering', notes: 'Dietary needs labeled', sequence: 4 },
+      { id: 5, time: '3:30 PM', activity: 'Closing panel', owner: 'Program director', notes: '60 minutes', sequence: 5 },
+      { id: 6, time: '5:00 PM', activity: 'Shuttles to hotel', owner: 'Triangle Shuttle Co.', notes: 'Every 20 minutes until 6:00 PM', sequence: 6 }
+    ],
+    planningTimeline: [
+      { id: 1, week: 'September', focus: 'Confirm dates, venue, and program goals with the university team', status: 'done' },
+      { id: 2, week: 'October', focus: 'Hotel room block, catering quotes, speaker invitations', status: 'in-progress' },
+      { id: 3, week: 'November to December', focus: 'Registration opens; AV and livestream plan', status: 'pending' },
+      { id: 4, week: 'January', focus: 'Speaker materials, shuttle schedule, printed program', status: 'pending' },
+      { id: 5, week: 'February, workshop week', focus: 'Room sets, final headcounts, on-site registration', status: 'pending' }
+    ]
+  },
+  'holiday-2026': {
+    tasks: [
+      { id: 'H-1', title: 'Reserve community hall', status: 'done', due_date: '2026-09-15', priority: 'high', owner: 'Carrie' },
+      { id: 'H-2', title: 'Book caterer and confirm menu', status: 'done', due_date: '2026-10-01', priority: 'high', owner: 'Carrie' },
+      { id: 'H-3', title: 'Send invitations to volunteers', status: 'in-progress', due_date: '2026-10-20', priority: 'high', owner: 'Volunteer coordinator' },
+      { id: 'H-4', title: 'Order volunteer awards', status: 'pending', due_date: '2026-11-10', priority: 'medium', owner: 'Carrie' },
+      { id: 'H-5', title: 'Finalize seating chart', status: 'pending', due_date: '2026-12-03', priority: 'medium', owner: 'Carrie' }
+    ],
+    budget: [
+      { id: 1, category: 'Hall rental', budgeted_amount: 900, actual_amount: 900, status: 'on-track' },
+      { id: 2, category: 'Catering', budgeted_amount: 2400, actual_amount: 2350, status: 'on-track' },
+      { id: 3, category: 'Decor and table settings', budgeted_amount: 500, actual_amount: 450, status: 'on-track' },
+      { id: 4, category: 'Volunteer awards', budgeted_amount: 400, actual_amount: 250, status: 'on-track' }
+    ],
+    vendors: [
+      { id: 1, name: 'Community Hall', service: 'Venue', contact_phone: '919-555-0121', contact_email: 'rentals@example.com', status: 'confirmed' },
+      { id: 2, name: 'Harvest Table Catering', service: 'Catering', contact_phone: '919-555-0175', contact_email: 'orders@example.com', status: 'confirmed' }
+    ],
+    timeline: [
+      { id: 1, time: '3:00 PM', activity: 'Setup begins', owner: 'Setup team', notes: 'Tables, linens, and centerpieces', sequence: 1 },
+      { id: 2, time: '5:30 PM', activity: 'Doors open', owner: 'Greeters', notes: 'Name tags at the welcome table', sequence: 2 },
+      { id: 3, time: '6:00 PM', activity: 'Dinner served', owner: 'Harvest Table Catering', notes: 'Buffet, two lines', sequence: 3 },
+      { id: 4, time: '7:00 PM', activity: 'Volunteer awards', owner: 'Executive director', notes: '20 minutes', sequence: 4 },
+      { id: 5, time: '8:30 PM', activity: 'Breakdown', owner: 'Setup team', notes: 'Hall cleared by 9:30 PM', sequence: 5 }
+    ],
+    planningTimeline: [
+      { id: 1, week: 'September', focus: 'Reserve hall and book caterer', status: 'done' },
+      { id: 2, week: 'October', focus: 'Invitations out; award categories chosen', status: 'in-progress' },
+      { id: 3, week: 'November', focus: 'RSVPs, awards ordered, decor plan', status: 'pending' },
+      { id: 4, week: 'December, event week', focus: 'Seating chart, final headcount to caterer, setup crew confirmed', status: 'pending' }
+    ]
+  }
+};
 
 function formatDate(dateStr) {
-  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return new Date(dateStr + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 function handleLogin(e) {
@@ -281,7 +363,7 @@ function renderLoginScreen() {
               <li>✓ Task & vendor management</li>
               <li>✓ Fully editable interface</li>
             </ul>
-            <p class="text-slate-500 mt-4 text-xs text-center">Ready for your organization — no database setup needed to try it.</p>
+            <p class="text-slate-500 mt-4 text-xs text-center">Ready for your organization. No database setup is needed to try it.</p>
           </div>
         </div>
       </div>
@@ -339,6 +421,7 @@ function renderDashboard() {
 function renderEventDetail() {
   const event = events.find(e => e.id === selectedEventId);
   if (!event) return;
+  const { tasks, budget, vendors, timeline, planningTimeline } = eventData[selectedEventId];
 
   const tasksCompleted = tasks.filter(t => t.status === 'done').length;
   const budgetStatus = event.budget_actual <= event.budget_total && event.budget_total > 0
@@ -481,7 +564,7 @@ function renderEventDetail() {
                   <input type="checkbox" ${task.status === 'done' ? 'checked' : ''} class="w-5 h-2 cursor-pointer">
                   <div class="flex-1">
                     <h4 class="font-medium">${task.title}</h4>
-                    <p class="text-xs text-slate-400 mt-1">${task.id} • Due ${formatDate(task.due_date)}</p>
+                    <p class="text-xs text-slate-400 mt-1">${task.owner} • Due ${formatDate(task.due_date)}</p>
                   </div>
                   <span class="text-xs px-2 py-1 rounded ${
                     task.priority === 'high' ? 'bg-red-900 text-red-300' : 'bg-slate-700 text-slate-300'
@@ -528,7 +611,7 @@ function renderEventDetail() {
 function selectEvent(eventId) {
   selectedEventId = eventId;
   currentTab = 'overview';
-  renderEventDetail();
+  renderDashboard();
 }
 
 function switchTab(tab) {
