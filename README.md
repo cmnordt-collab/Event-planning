@@ -23,8 +23,8 @@ The dashboard gives you one central place to:
 - **URL:** GitHub Pages (works from browser)
 - **Data:** Hardcoded test events
 - **Editing:** Changes happen in-session only (don't save)
-- **Share With:** Chatham Pride, West End, Lavender Social Collective, etc.
-
+- - **Share With:** Chatham Pride, West End, Lavender Social Collective, etc.
++ - **Share With:** Prospective clients, linked from the landing page
 ### **2. Production Version** (`dashboard-editable.html`)
 - **Purpose:** Real event planning with persistent data
 - **Access:** Username/password login with JWT auth
