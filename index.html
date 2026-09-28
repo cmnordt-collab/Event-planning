@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carolina &amp; Co. Events | Event logistics in Chatham County and the Triangle</title>
+<meta name="description" content="Boutique event logistics for nonprofits, universities, and businesses across Chatham County and the North Carolina Triangle.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ===== EDIT THESE LINKS ===== */
+  /* Booking link and email are set in the HTML below. Search for "REPLACE". */
+
+  :root {
+    --pine: #1F3D36;
+    --pine-soft: #2E5249;
+    --river: #D8E4E1;
+    --page: #F5F7F4;
+    --white: #FFFFFF;
+    --ink: #1B2421;
+    --muted: #55625E;
+    --gold: #C9951A;
+    --line: #CBD6D2;
+    --serif: "Young Serif", Georgia, "Times New Roman", serif;
+    --sans: "Figtree", -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  a { color: var(--pine); }
+  a:focus-visible, button:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 3px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 400; line-height: 1.15; margin: 0; }
+  h2 { font-size: clamp(1.75rem, 3.5vw, 2.4rem); color: var(--pine); }
+  h3 { font-size: 1.3rem; }
+  p { margin: 0; }
+
+  /* Header */
+  header { padding: 1.5rem 0; }
+  header .wrap { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+  .brand { font-family: var(--serif); font-size: 1.35rem; color: var(--pine); text-decoration: none; }
+  .header-link { font-weight: 600; font-size: 0.95rem; }
+
+  /* Buttons */
+  .btn {
+    display: inline-block;
+    padding: 0.85rem 1.4rem;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+  .btn-primary { background: var(--pine); color: var(--white); }
+  .btn-primary:hover { background: var(--pine-soft); }
+  .btn-secondary { color: var(--pine); border: 2px solid var(--pine); }
+  .btn-secondary:hover { background: var(--river); }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+  /* Hero */
+  .hero { padding: 3rem 0 5rem; }
+  .hero .wrap { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3.5rem; align-items: center; }
+  .hero h1 { font-size: clamp(2.4rem, 5.5vw, 3.8rem); color: var(--pine); margin-bottom: 1.25rem; }
+  .hero .lede { font-size: 1.2rem; color: var(--muted); max-width: 34ch; margin-bottom: 2rem; }
+  .hero .proof { margin-top: 2rem; font-size: 0.98rem; color: var(--muted); max-width: 42ch; }
+
+  /* Run of show card: the signature element */
+  .ros {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 1.75rem;
+    box-shadow: 0 18px 40px -24px rgba(31, 61, 54, 0.45);
+  }
+  .ros-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.25rem; }
+  .ros-head h3 { font-size: 1.15rem; color: var(--pine); }
+  .ros-head span { font-size: 0.85rem; color: var(--muted); }
+  .ros ol { list-style: none; margin: 0; padding: 0; }
+  .ros li {
+    display: grid;
+    grid-template-columns: 4.25rem 1.5rem 1fr;
+    align-items: center;
+    padding: 0.7rem 0;
+    border-top: 1px solid var(--river);
+    font-size: 0.98rem;
+  }
+  .ros li:first-child { border-top: none; }
+  .ros time { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .check {
+    width: 1.1rem; height: 1.1rem;
+    border-radius: 50%;
+    border: 2px solid var(--line);
+    display: inline-block;
+  }
+  .ros li.done .check {
+    background: var(--gold);
+    border-color: var(--gold);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-size: contain;
+  }
+  .ros li.done .item { color: var(--muted); }
+  .ros-foot { margin-top: 1rem; font-size: 0.88rem; color: var(--pine); font-weight: 600; }
+
+  /* Sections */
+  section { padding: 4.5rem 0; }
+  .intro { background: var(--pine); color: var(--white); }
+  .intro h2 { color: var(--white); max-width: 22ch; margin-bottom: 1.25rem; }
+  .intro p { max-width: 62ch; font-size: 1.15rem; color: var(--river); }
+
+  .section-head { margin-bottom: 2.5rem; max-width: 60ch; }
+  .section-head p { margin-top: 0.75rem; color: var(--muted); }
+
+  /* Services as a price list, not cards */
+  .services dl { margin: 0; border-top: 2px solid var(--pine); }
+  .service {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem 2rem;
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .service dt h3 { color: var(--pine); }
+  .service .season { display: block; font-family: var(--sans); font-size: 0.9rem; color: var(--muted); margin-top: 0.25rem; }
+  .service .price { font-family: var(--serif); font-size: 1.2rem; text-align: right; white-space: nowrap; }
+  .service .price small { display: block; font-family: var(--sans); font-size: 0.82rem; color: var(--muted); }
+  .service dd { grid-column: 1 / -1; margin: 0; max-width: 64ch; color: var(--muted); }
+  .terms { margin-top: 1.5rem; font-size: 0.95rem; color: var(--muted); }
+
+  /* Dashboard */
+  .dash { background: var(--river); }
+  .dash .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+  .dash p { margin: 1rem 0 1.75rem; max-width: 48ch; }
+  .dash ul { margin: 0; padding: 0; list-style: none; }
+  .dash li {
+    background: var(--white);
+    padding: 0.9rem 1.1rem;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    display: flex; justify-content: space-between; gap: 1rem;
+  }
+  .dash li span:last-child { color: var(--muted); font-size: 0.92rem; }
+
+  /* Work */
+  .work-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+  .work h3 { color: var(--pine); margin-bottom: 0.25rem; }
+  .work .where { font-size: 0.9rem; color: var(--gold); font-weight: 600; margin-bottom: 0.75rem; }
+  .work p:last-child { color: var(--muted); }
+  .work-more { margin-top: 2.5rem; color: var(--muted); }
+
+  /* About */
+  .about .wrap { display: grid; grid-template-columns: 180px 1fr; gap: 3rem; align-items: start; }
+  .portrait {
+    width: 180px; height: 180px; border-radius: 50%;
+    background: var(--pine); color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: 3rem;
+    object-fit: cover;
+  }
+  .about p { max-width: 60ch; margin-top: 1rem; }
+
+  /* Closing */
+  .closing { background: var(--pine); color: var(--white); text-align: center; }
+  .closing h2 { color: var(--white); margin: 0 auto 1rem; max-width: 24ch; }
+  .closing p { color: var(--river); margin: 0 auto 2rem; max-width: 50ch; }
+  .closing .actions { justify-content: center; }
+  .closing .btn-primary { background: var(--gold); color: var(--ink); }
+  .closing .btn-primary:hover { background: #DDA92E; }
+  .closing .contact { margin-top: 2rem; font-size: 0.95rem; }
+  .closing .contact a { color: var(--white); }
+
+  footer { padding: 2rem 0; font-size: 0.88rem; color: var(--muted); }
+
+  /* Responsive */
+  @media (max-width: 860px) {
+    .hero .wrap, .dash .wrap, .about .wrap { grid-template-columns: 1fr; gap: 2.5rem; }
+    .work-list { grid-template-columns: 1fr; gap: 2rem; }
+    .portrait { width: 120px; height: 120px; font-size: 2.2rem; }
+    .service { grid-template-columns: 1fr; }
+    .service .price { text-align: left; }
+    section { padding: 3.5rem 0; }
+    .header-link { display: none; }
+  }
+
+  /* One orchestrated moment: checkmarks fill in on load */
+  @media (prefers-reduced-motion: no-preference) {
+    .ros li.done .check { animation: tick 0.35s ease-out both; }
+    .ros li.done:nth-child(1) .check { animation-delay: 0.4s; }
+    .ros li.done:nth-child(2) .check { animation-delay: 0.8s; }
+    .ros li.done:nth-child(3) .check { animation-delay: 1.2s; }
+    @keyframes tick { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="#top">Carolina &amp; Co. Events</a>
+    <!-- REPLACE: booking link -->
+    <a class="header-link" href="#contact">Book a planning call</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1>Every detail handled, so you can focus on your people.</h1>
+        <p class="lede">Boutique event logistics for nonprofits, universities, and businesses across Chatham County and the Triangle.</p>
+        <div class="actions">
+          <!-- REPLACE: booking link -->
+          <a class="btn btn-primary" href="#contact">Book a free planning call</a>
+          <a class="btn btn-secondary" href="dashboard-demo.html">See how I organize events</a>
+        </div>
+        <p class="proof">24 events planned, from community festivals of 1,200 guests to international delegation programs.</p>
+      </div>
+
+      <div class="ros" aria-label="Sample event-day run of show">
+        <div class="ros-head">
+          <h3>Festival day run of show</h3>
+          <span>Saturday</span>
+        </div>
+        <ol>
+          <li class="done"><time>7:30</time><span class="check" aria-hidden="true"></span><span class="item">Vendors check in</span></li>
+          <li class="done"><time>9:00</time><span class="check" aria-hidden="true"></span><span class="item">Volunteer briefing</span></li>
+          <li class="done"><time>10:30</time><span class="check" aria-hidden="true"></span><span class="item">Sound check, main stage</span></li>
+          <li><time>11:00</time><span class="check" aria-hidden="true"></span><span class="item">Gates open</span></li>
+          <li><time>2:00</time><span class="check" aria-hidden="true"></span><span class="item">Headline performance</span></li>
+          <li><time>6:00</time><span class="check" aria-hidden="true"></span><span class="item">Teardown and vendor sign-out</span></li>
+        </ol>
+        <p class="ros-foot">On schedule</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="intro">
+    <div class="wrap">
+      <h2>Calm, organized events from first idea to final thank-you.</h2>
+      <p>Whether it's a community festival, a campus workshop, or a visiting delegation, I manage the moving parts: timelines, venues, vendors, travel, schedules, and the day itself. You get a clear plan, a single point of contact, and an event that runs on time.</p>
+    </div>
+  </section>
+
+  <section class="services" id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Services and pricing</h2>
+        <p>Every engagement starts with a free planning call, so we can shape the right level of support for your event.</p>
+      </div>
+      <dl>
+        <div class="service">
+          <dt><h3>Day-of coordination</h3></dt>
+          <div class="price">$750<small>starting at</small></div>
+          <dd>You've planned it, and I'll run it. Includes a pre-event walkthrough, a finalized run of show, vendor check-ins, and on-site management from setup through teardown.</dd>
+        </div>
+        <div class="service">
+          <dt><h3>Full event management</h3><span class="season">For one- or two-day events</span></dt>
+          <div class="price">$3,500<small>starting at</small></div>
+          <dd>Planning from kickoff to wrap-up, including your timeline, venue and vendor coordination, budget tracking, volunteer and staff scheduling, and day-of leadership. Includes a private event dashboard for your team.</dd>
+        </div>
+        <div class="service">
+          <dt><h3>Program and delegation logistics</h3><span class="season">For workshops, executive education, and visiting groups</span></dt>
+          <div class="price">$5,000<small>custom quotes from</small></div>
+          <dd>Attendee travel, lodging, ground transportation, site visits, and daily schedules for multi-day programs.</dd>
+        </div>
+        <div class="service">
+          <dt><h3>Holiday event assist</h3><span class="season">Available October through December</span></dt>
+          <div class="price">$1,250<small>starting at</small></div>
+          <dd>Short-term logistics support for a holiday event that's already in motion.</dd>
+        </div>
+      </dl>
+      <p class="terms">A 50% deposit reserves your date, with the balance due before the event.</p>
+    </div>
+  </section>
+
+  <section class="dash">
+    <div class="wrap">
+      <div>
+        <h2>Always know where things stand.</h2>
+        <p>Full event management clients receive a private event dashboard with the planning timeline, tasks, budget, vendors, and run of show in one place. Your whole team can check progress anytime, without digging through email threads.</p>
+        <a class="btn btn-primary" href="dashboard-demo.html">Try the demo</a>
+      </div>
+      <ul aria-label="Dashboard sections">
+        <li><span>Planning timeline</span><span>Week by week</span></li>
+        <li><span>Tasks</span><span>Owners and due dates</span></li>
+        <li><span>Budget</span><span>Planned and actual</span></li>
+        <li><span>Vendors</span><span>Contacts and contracts</span></li>
+        <li><span>Run of show</span><span>Minute by minute</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="work">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Selected work</h2>
+      </div>
+      <div class="work-list">
+        <article class="work">
+          <h3>Chatham Pride Festival</h3>
+          <p class="where">Pittsboro, Years 1 to 3</p>
+          <p>A community festival welcoming about 1,200 guests, plus a 300-person evening show, with vendors, entertainment, and volunteer coordination.</p>
+        </article>
+        <article class="work">
+          <h3>GEM Workshops, NC State</h3>
+          <p class="where">Washington, D.C., Raleigh, and virtual</p>
+          <p>Three workshops in three formats, serving up to 200 attendees each.</p>
+        </article>
+        <article class="work">
+          <h3>International delegation program, NC State</h3>
+          <p class="where">Florida, 10 days</p>
+          <p>Travel and site-visit logistics for an agricultural delegation from Thailand.</p>
+        </article>
+      </div>
+      <p class="work-more">Other work includes corporate executive education, volunteer build events, community walks, and school family nights.</p>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="wrap">
+      <!-- REPLACE: swap this div for <img class="portrait" src="carrie.jpg" alt="Carrie Rogers"> -->
+      <div class="portrait" aria-hidden="true">CR</div>
+      <div>
+        <h2>Hi, I'm Carrie.</h2>
+        <p>I'm a Chatham County event planner with a background in nonprofit leadership and university programs. I love the part of events most people dread: the spreadsheets, the schedules, and the contingency plans.</p>
+        <p>My goal is simple. On event day, you should be talking with your guests, not hunting for the extension cords.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing" id="contact">
+    <div class="wrap">
+      <h2>Planning something for this season or next spring?</h2>
+      <p>Let's talk through what you need. The first call is free, with no obligation.</p>
+      <div class="actions">
+        <!-- REPLACE: booking link -->
+        <a class="btn btn-primary" href="mailto:carrienordt@gmail.com?subject=Planning%20call">Book a free planning call</a>
+      </div>
+      <p class="contact"><a href="mailto:carrienordt@gmail.com">carrienordt@gmail.com</a><br>Pittsboro, NC. Serving Chatham County and the Triangle.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">&copy; 2026 Carolina &amp; Co. Events</div>
+</footer>
+
+</body>
+</html>
