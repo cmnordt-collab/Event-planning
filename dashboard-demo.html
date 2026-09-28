@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Planning Dashboard - Demo</title>
+    <title>Sample Event Dashboard | Carolina &amp; Co. Events</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -165,6 +165,14 @@
         .inline-block { display: inline-block; }
 
         .gradient-to-br { background: linear-gradient(to bottom right, #0f172a, #1e293b); }
+        .brand-link { display: inline-block; color: #67e8f9; text-decoration: none; font-size: 0.9rem; margin-bottom: 0.25rem; }
+        .brand-link:hover { text-decoration: underline; }
+        .btn-link { color: #fff; text-decoration: none; white-space: nowrap; }
+        .btn-link:hover { opacity: 0.85; }
+        .header-actions { flex-wrap: wrap; }
+        header > div { flex-wrap: wrap; gap: 1rem; }
+        .demo-note { background: #1e293b; color: #94a3b8; font-size: 0.85rem; text-align: center; padding: 0.5rem 1rem; border-bottom: 1px solid #334155; }
+        a:focus-visible, button:focus-visible { outline: 2px solid #67e8f9; outline-offset: 2px; }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100">
@@ -175,7 +183,7 @@
 let currentUser = { id: 1, username: 'carrie' };
 let selectedEventId = 'gala-2027-spring';
 let currentTab = 'overview';
-let isLoggedIn = false;
+let isLoggedIn = true;
 
 const events = [
   {
@@ -298,13 +306,17 @@ function renderDashboard() {
     <div class="min-h-screen flex flex-col">
       <header class="border-b border-slate-700 px-8 py-6">
         <div class="flex items-center justify-between max-w-7xl mx-auto">
-          <h1 class="text-3xl font-light">Event Dashboard</h1>
-          <div class="flex items-center gap-4">
-            <span class="text-slate-400">Welcome, ${currentUser.username}</span>
-            <button onclick="handleLogout()" class="px-4 py-2 bg-slate-700 text-sm rounded">Logout</button>
+          <div>
+            <a href="index.html" class="brand-link">Carolina &amp; Co. Events</a>
+            <h1 class="text-3xl font-light">Sample event dashboard</h1>
+          </div>
+          <div class="flex items-center gap-4 header-actions">
+            <a href="index.html" class="px-4 py-2 bg-slate-700 text-sm rounded btn-link">Back to site</a>
+            <a href="mailto:carrienordt@gmail.com?subject=Planning%20call" class="px-4 py-2 bg-cyan-600 text-sm rounded btn-link">Book a planning call</a>
           </div>
         </div>
       </header>
+      <p class="demo-note">This is a sample dashboard with example events. Feel free to click around and edit. Changes aren't saved.</p>
 
       <div class="flex flex-1 overflow-hidden">
         <aside class="w-72 border-r border-slate-700 bg-slate-800 overflow-y-auto">
